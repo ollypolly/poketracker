@@ -1,5 +1,4 @@
-import { cardClient } from './../../network/cardClient';
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../../app/store';
 import { CardData } from '../../model/card.model';
 import { fetchCardsBySet } from './cardThunks';

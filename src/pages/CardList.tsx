@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import moment from "moment";
 import { FaSearch, FaTimesCircle } from "react-icons/fa";
 import Card from "../components/Card/Card";
-import { CardData } from '../model/card.model';
-import { cardClient } from "../network/cardClient";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCards, selectCardsLoading } from "../components/Card/cardSlice";
 import { fetchCardsBySet } from "../components/Card/cardThunks";

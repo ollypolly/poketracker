@@ -1,8 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
-import moment from "moment";
 import { CardData } from "../../model/card.model";
 import { useSpring, animated } from "react-spring";
+import { Input, DropdownMenu, DropdownItem, UncontrolledButtonDropdown, DropdownToggle, Label } from "reactstrap";
+import { FaEllipsisV } from "react-icons/fa";
+import { useState } from "react";
 
 interface Props {
   cardData: CardData;
@@ -59,7 +61,64 @@ const EventCardContainer = styled.div`
 
 const FlexContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+`;
+
+const StyledCheckbox = styled(Label)`
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  user-select: none;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+
+  &:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+
+  input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 `;
 
 // Use the height and width of the card
@@ -76,8 +135,10 @@ const trans = (x: number, y: number, s: number) =>
 export default function Card({ cardData }: Props) {
   const [props, set] = useSpring(() => ({
     xys: [0, 0, 1],
-    config: { mass: 2, tension: 300, friction: 40 }
+    config: { mass: 0.5, tension: 300, friction: 40 }
   }));
+
+  const [disableAnimation, setDisableAnimation] = useState(false);
 
   return (
     <animated.div
@@ -88,7 +149,12 @@ export default function Card({ cardData }: Props) {
         const offsetX = x - cardRect.left,
           offsetY = y - cardRect.top;
 
-        set({ xys: calc(offsetX, offsetY) });
+        if (!disableAnimation) {
+          set({ xys: calc(offsetX, offsetY) });
+        } else {
+          set({ xys: [0, 0, 1] })
+        }
+
       }}
       onMouseLeave={() => set({ xys: [0, 0, 1] })}
       //@ts-ignore
@@ -101,7 +167,20 @@ export default function Card({ cardData }: Props) {
             })`
         }}
       >
-        <FlexContainer>
+        <FlexContainer onMouseEnter={() => setDisableAnimation(true)} onMouseLeave={() => setDisableAnimation(false)}>
+          {/* <UncontrolledButtonDropdown >
+            <DropdownToggle>
+              <FaEllipsisV />
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem>Add to deck</DropdownItem>
+            </DropdownMenu>
+          </UncontrolledButtonDropdown> */}
+          <StyledCheckbox check>
+            <Input type="checkbox" />
+            <span className="checkmark"></span>
+          </StyledCheckbox>
+
         </FlexContainer>
       </EventCardContainer>
     </animated.div>
