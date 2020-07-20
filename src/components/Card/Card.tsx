@@ -2,8 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { CardData } from "../../model/card.model";
 import { useSpring, animated } from "react-spring";
-import { Input, DropdownMenu, DropdownItem, UncontrolledButtonDropdown, DropdownToggle, Label } from "reactstrap";
-import { FaEllipsisV } from "react-icons/fa";
+import { Input, Label } from "reactstrap";
 import { useState } from "react";
 
 interface Props {

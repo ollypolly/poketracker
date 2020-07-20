@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { FaSearch, FaTimesCircle } from "react-icons/fa";
 import Card from "../components/Card/Card";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCards, selectCardsLoading } from "../components/Card/cardSlice";
-import { fetchCardsBySet } from "../components/Card/cardThunks";
+import { selectCards, selectCardsLoading } from "./cardListSlice";
+import { fetchCardsBySet } from "./cardListThunks";
 import { Spinner } from 'reactstrap'
 
-const EventContainer = styled.div`
+const CardContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -31,8 +31,8 @@ const StyledFilterContainer = styled.div`
 const StyledInput = styled.input`
   width: 100%;
   border: none;
-  font-size: 2em;
-  border-bottom: 3px solid lightgray;
+  font-size: 1.2em;
+  border-bottom: 2px solid lightgray;
   padding-bottom: 0.2em;
   margin-bottom: 0.3em;
   outline: none;
@@ -45,14 +45,13 @@ export default () => {
   const cardsLoading = useSelector(selectCardsLoading);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => { dispatch(fetchCardsBySet({ setName: 'Rebel Clash', totalCards: 192 })) }, [dispatch])
+  useEffect(() => { dispatch(fetchCardsBySet({ set: 'Rebel Clash', pageSize: 192 })) }, [dispatch])
 
   const filteredEvents = cards && [...cards]
     .filter(
       card =>
         card.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
-  //.sort((a, b) => Math.abs(new Date(a.date).getTime()) - Math.abs(new Date(b.date).getTime()));
 
   return (
     cardsLoading ? <Spinner type="grow" color="primary" /> : (
@@ -68,11 +67,11 @@ export default () => {
             <FaTimesCircle className="clear" onClick={() => setSearchTerm("")} />
           )}
         </StyledFilterContainer>
-        <EventContainer>
+        <CardContainer>
           {filteredEvents?.map(event => (
             <Card key={event.id} cardData={event} />
           ))}
-        </EventContainer>
+        </CardContainer>
       </>
     )
 
