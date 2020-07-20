@@ -1,8 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { cardClient } from './../../network/cardClient';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../../app/store';
+import { CardData } from '../../model/card.model';
+import { fetchCardsBySet } from '../cardThunks';
 
 interface CardState {
   value: number;
+  cardsForCurrentSet?: CardData[];
 }
 
 const initialState: CardState = {
@@ -10,7 +14,7 @@ const initialState: CardState = {
 };
 
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: 'card',
   initialState,
   reducers: {
     increment: state => {
@@ -28,6 +32,12 @@ export const counterSlice = createSlice({
       state.value += action.payload;
     },
   },
+  extraReducers: builder => {
+    builder.addCase(fetchCardsBySet.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.cardsForCurrentSet = action.payload.cards
+    })
+  }
 });
 
 export const { increment, decrement, incrementByAmount } = counterSlice.actions;
@@ -46,5 +56,7 @@ export const incrementAsync = (amount: number): AppThunk => dispatch => {
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectCount = (state: RootState) => state.card.value;
+
+export const selectCards = (state: RootState) => state.card.cardsForCurrentSet;
 
 export default counterSlice.reducer;

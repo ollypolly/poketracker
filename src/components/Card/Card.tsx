@@ -1,11 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
 import moment from "moment";
-import { Event } from "../model/card.model";
+import { CardData } from "../../model/card.model";
 import { useSpring, animated } from "react-spring";
 
 interface Props {
-  event: Event;
+  cardData: CardData;
 }
 
 const EventCardContainer = styled.div`
@@ -73,7 +73,7 @@ const calc = (x: number, y: number) => [
 const trans = (x: number, y: number, s: number) =>
   `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
-export default function Card({ event }: Props) {
+export default function Card({ cardData }: Props) {
   const [props, set] = useSpring(() => ({
     xys: [0, 0, 1],
     config: { mass: 2, tension: 300, friction: 40 }
@@ -94,19 +94,18 @@ export default function Card({ event }: Props) {
       //@ts-ignore
       style={{ transform: props.xys.interpolate(trans) }}
     >
-        <EventCardContainer
-          style={{
-            backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${
-              event.background
+      <EventCardContainer
+        style={{
+          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${
+            cardData.imageUrl
             })`
-          }}
-        >
-          <FlexContainer>
-            <p>{moment(event.date).format("Do MMMM YYYY")}</p>
-          </FlexContainer>
-          <h1>{event.title}</h1>
-          <h2>{event.subtitle}</h2>
-        </EventCardContainer>
+        }}
+      >
+        <FlexContainer>
+        </FlexContainer>
+        <h1>{cardData.name}</h1>
+        <h2>{cardData.supertype}</h2>
+      </EventCardContainer>
     </animated.div>
   );
 }
