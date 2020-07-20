@@ -103,8 +103,6 @@ export default function Card({ cardData }: Props) {
       >
         <FlexContainer>
         </FlexContainer>
-        <h1>{cardData.name}</h1>
-        <h2>{cardData.supertype}</h2>
       </EventCardContainer>
     </animated.div>
   );

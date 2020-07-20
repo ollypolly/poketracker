@@ -9,9 +9,9 @@ export const cardClient = {
             });
     },
 
-    getCardsForSet(code: string) {
+    getCardsForSet(data: { set: string, pageSize: number }) {
         return request
-            .getData(`v1/cards`, { code })
+            .getData(`v1/cards`, data)
             .then(response => {
                 return response;
             });

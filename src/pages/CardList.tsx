@@ -6,8 +6,9 @@ import Card from "../components/Card/Card";
 import { CardData } from '../model/card.model';
 import { cardClient } from "../network/cardClient";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCards } from "../components/Card/cardSlice";
-import { fetchCardsBySet } from "../components/cardThunks";
+import { selectCards, selectCardsLoading } from "../components/Card/cardSlice";
+import { fetchCardsBySet } from "../components/Card/cardThunks";
+import { Spinner } from 'reactstrap'
 
 const EventContainer = styled.div`
   display: flex;
@@ -44,36 +45,39 @@ const StyledInput = styled.input`
 export default () => {
   const dispatch = useDispatch();
   const cards = useSelector(selectCards);
+  const cardsLoading = useSelector(selectCardsLoading);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => { dispatch(fetchCardsBySet('swsh2')) }, [dispatch])
+  useEffect(() => { dispatch(fetchCardsBySet({ setName: 'Rebel Clash', totalCards: 192 })) }, [dispatch])
 
   const filteredEvents = cards && [...cards]
-  // .filter(
-  //   event =>
-  //     moment(event.date) > moment() &&
-  //     event.title.toLowerCase().includes(searchTerm.toLowerCase())
-  // )
+    .filter(
+      card =>
+        card.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   //.sort((a, b) => Math.abs(new Date(a.date).getTime()) - Math.abs(new Date(b.date).getTime()));
 
   return (
-    <>
-      <StyledFilterContainer>
-        <FaSearch />
-        <StyledInput
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={event => setSearchTerm(event.target.value)}
-        />
-        {searchTerm && (
-          <FaTimesCircle className="clear" onClick={() => setSearchTerm("")} />
-        )}
-      </StyledFilterContainer>
-      <EventContainer>
-        {filteredEvents?.map(event => (
-          <Card key={event.id} cardData={event} />
-        ))}
-      </EventContainer>
-    </>
+    cardsLoading ? <Spinner type="grow" color="primary" /> : (
+      <>
+        <StyledFilterContainer>
+          <FaSearch />
+          <StyledInput
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={event => setSearchTerm(event.target.value)}
+          />
+          {searchTerm && (
+            <FaTimesCircle className="clear" onClick={() => setSearchTerm("")} />
+          )}
+        </StyledFilterContainer>
+        <EventContainer>
+          {filteredEvents?.map(event => (
+            <Card key={event.id} cardData={event} />
+          ))}
+        </EventContainer>
+      </>
+    )
+
   );
 };

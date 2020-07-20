@@ -2,15 +2,17 @@ import { cardClient } from './../../network/cardClient';
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../../app/store';
 import { CardData } from '../../model/card.model';
-import { fetchCardsBySet } from '../cardThunks';
+import { fetchCardsBySet } from './cardThunks';
 
 interface CardState {
   value: number;
   cardsForCurrentSet?: CardData[];
+  cardsLoading: boolean;
 }
 
 const initialState: CardState = {
   value: 0,
+  cardsLoading: true,
 };
 
 export const counterSlice = createSlice({
@@ -33,8 +35,14 @@ export const counterSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    builder.addCase(fetchCardsBySet.pending, (state) => {
+      state.cardsLoading = true;
+    })
+    builder.addCase(fetchCardsBySet.rejected, (state, action) => {
+      state.cardsLoading = false;
+    })
     builder.addCase(fetchCardsBySet.fulfilled, (state, action) => {
-      console.log(action.payload)
+      state.cardsLoading = false;
       state.cardsForCurrentSet = action.payload.cards
     })
   }
@@ -58,5 +66,7 @@ export const incrementAsync = (amount: number): AppThunk => dispatch => {
 export const selectCount = (state: RootState) => state.card.value;
 
 export const selectCards = (state: RootState) => state.card.cardsForCurrentSet;
+
+export const selectCardsLoading = (state: RootState) => state.card.cardsLoading;
 
 export default counterSlice.reducer;
