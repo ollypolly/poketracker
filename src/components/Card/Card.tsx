@@ -9,8 +9,8 @@ interface Props {
 }
 
 const EventCardContainer = styled.div`
-  width: 297px;
-  min-height: 289px;
+  width: 245px;
+  height: 342px;
   margin: 0.5rem;
   padding: 1rem;
   border-radius: 10px;
@@ -96,7 +96,7 @@ export default function Card({ cardData }: Props) {
     >
       <EventCardContainer
         style={{
-          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${
+          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0) ), url(${
             cardData.imageUrl
             })`
         }}
