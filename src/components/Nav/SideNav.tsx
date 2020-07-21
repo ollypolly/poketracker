@@ -13,8 +13,9 @@ import {
   setSidebarSearchterm,
   setSearchterm,
 } from "../../pages/CardList/cardListSlice";
-import { Spinner, Input } from "reactstrap";
+import { Spinner, Input, Progress } from "reactstrap";
 import styled from "styled-components";
+import { selectChecked } from "../../app/checkboxSlice";
 
 export interface Props {
   navOpen: boolean;
@@ -31,20 +32,16 @@ const StyledNavContainer = styled.div<Props>`
   background-color: #eeeeee;
   overflow: auto;
   transition: left 0.3s ease-in-out;
+  display: inline-block;
 
   .set {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
     padding: 1rem;
     height: 100px;
-
-    img {
-      max-width: 100%;
-      max-height: 100%;
-      display: block;
-    }
+    background-size: 180px;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.4s ease 0s;
 
     &:hover {
       background-color: lightgray;
@@ -68,6 +65,7 @@ export function SideNav() {
   const setsLoading = useSelector(selectSetsLoading);
   const sidebar = useSelector(selectSidebar);
   const sidebarSearchterm = useSelector(selectSidebarSearchterm);
+  const checked = useSelector(selectChecked);
 
   const filteredSets = sets
     ?.slice()
@@ -100,26 +98,37 @@ export function SideNav() {
             />
           </div>
 
-          {filteredSets?.map((set) => (
-            <div
-              className="set"
-              key={set.code}
-              onClick={() => {
-                dispatch(
-                  fetchCardsBySet({
-                    set: set.name,
-                    pageSize: set.totalCards,
-                  })
-                );
-                dispatch(setSidebar(false));
-                dispatch(setSidebarSearchterm(""));
-                dispatch(setSearchterm(""));
-              }}
-            >
-              <img src={set.logoUrl} alt={set.name} />
-              {/* <Progress value={50}>50/{set.totalCards}</Progress> */}
-            </div>
-          ))}
+          {filteredSets?.map((set) => {
+            const currentSetChecked = set && checked[set.code];
+            return (
+              <React.Fragment key={set.code}>
+                <div
+                  className="set"
+                  onClick={() => {
+                    dispatch(
+                      fetchCardsBySet({
+                        set: set.name,
+                        pageSize: set.totalCards,
+                      })
+                    );
+                    dispatch(setSidebar(false));
+                    dispatch(setSidebarSearchterm(""));
+                    dispatch(setSearchterm(""));
+                  }}
+                  style={{ backgroundImage: `url(${set.logoUrl})` }}
+                ></div>
+                <Progress
+                  value={
+                    currentSetChecked &&
+                    set &&
+                    (currentSetChecked.length / set.totalCards) * 100
+                  }
+                >
+                  {currentSetChecked?.length}/{set?.totalCards}
+                </Progress>
+              </React.Fragment>
+            );
+          })}
         </>
       )}
     </StyledNavContainer>
