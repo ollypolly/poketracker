@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FaSearch, FaTimesCircle } from "react-icons/fa";
+import { FaSearch, FaTimesCircle, FaAlignLeft } from "react-icons/fa";
 import Card from "../components/Card/Card";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCards, selectCardsLoading } from "./cardListSlice";
+import {
+  selectCards,
+  selectCardsLoading,
+  selectSidebar,
+  setSidebar,
+} from "./cardListSlice";
 import { fetchCardsBySet } from "./cardListThunks";
-import { Spinner } from 'reactstrap'
+import { Spinner, Button } from "reactstrap";
+import { Nav } from "../components/Nav/Nav";
 
 const CardContainer = styled.div`
   display: flex;
@@ -43,37 +49,50 @@ export default () => {
   const dispatch = useDispatch();
   const cards = useSelector(selectCards);
   const cardsLoading = useSelector(selectCardsLoading);
+  const sidebar = useSelector(selectSidebar);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => { dispatch(fetchCardsBySet({ set: 'Rebel Clash', pageSize: 192 })) }, [dispatch])
+  useEffect(() => {
+    dispatch(fetchCardsBySet({ set: "Rebel Clash", pageSize: 192 }));
+  }, [dispatch]);
 
-  const filteredEvents = cards && [...cards]
-    .filter(
-      card =>
-        card.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const filteredEvents =
+    cards &&
+    [...cards].filter((card) =>
+      card.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   return (
-    cardsLoading ? <Spinner type="grow" color="primary" /> : (
-      <>
-        <StyledFilterContainer>
-          <FaSearch />
-          <StyledInput
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={event => setSearchTerm(event.target.value)}
-          />
-          {searchTerm && (
-            <FaTimesCircle className="clear" onClick={() => setSearchTerm("")} />
-          )}
-        </StyledFilterContainer>
-        <CardContainer>
-          {filteredEvents?.map(event => (
-            <Card key={event.id} cardData={event} />
-          ))}
-        </CardContainer>
-      </>
-    )
-
+    <>
+      <Nav />
+      <Button color="info" onClick={() => dispatch(setSidebar(!sidebar))}>
+        <FaAlignLeft />
+      </Button>
+      {cardsLoading ? (
+        <Spinner type="grow" color="primary" />
+      ) : (
+        <>
+          <StyledFilterContainer>
+            <FaSearch />
+            <StyledInput
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+            />
+            {searchTerm && (
+              <FaTimesCircle
+                className="clear"
+                onClick={() => setSearchTerm("")}
+              />
+            )}
+          </StyledFilterContainer>
+          <CardContainer>
+            {filteredEvents?.map((event) => (
+              <Card key={event.id} cardData={event} />
+            ))}
+          </CardContainer>
+        </>
+      )}
+    </>
   );
 };

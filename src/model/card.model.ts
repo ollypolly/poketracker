@@ -1,3 +1,17 @@
+export interface SetData {
+  code: string;
+  expandedLegal: boolean;
+  logoUrl: string;
+  name: string;
+  ptcgoCode: string;
+  releaseDate: string;
+  series: string;
+  standardLegal: boolean;
+  symbolUrl: string;
+  totalCards: number;
+  updatedAt: string;
+}
+
 export interface CardData {
   artist: string;
   id: string;
@@ -10,14 +24,14 @@ export interface CardData {
   set: string;
   setCode: string;
   subtype: string;
-  supertype: CardType
+  supertype: CardType;
   text: string[];
 }
 
 export enum Rarity {
-  COMMON = 'common'
+  COMMON = "common",
 }
 
 export enum CardType {
-  TRAINER = 'Trainer'
+  TRAINER = "Trainer",
 }

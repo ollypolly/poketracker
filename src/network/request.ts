@@ -9,7 +9,7 @@ const api = axios.create({
 });
 
 export const request = {
-  getData<T = any>(uri: string, params: any): Promise<T> {
+  getData<T = any>(uri: string, params?: any): Promise<T> {
     return api.get<T>(uri, {
       params,
     }).then(response => {
