@@ -65,9 +65,10 @@ const EventCardContainer = styled.div`
   }
 
   @media ${device.mobileL} {
-    width: 110px;
-    height: 150px;
+    width: 115px;
+    height: 160px;
     margin: 0.2rem;
+    border-radius: 5px;
   }
 `;
 

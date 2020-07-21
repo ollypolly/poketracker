@@ -9,8 +9,11 @@ import {
   selectSetsLoading,
   selectSidebar,
   setSidebar,
+  selectSidebarSearchterm,
+  setSidebarSearchterm,
+  setSearchterm,
 } from "../../pages/CardList/cardListSlice";
-import { Spinner, Progress, Input } from "reactstrap";
+import { Spinner, Input } from "reactstrap";
 import styled from "styled-components";
 
 export interface Props {
@@ -19,33 +22,43 @@ export interface Props {
 
 const StyledNavContainer = styled.div<Props>`
   position: fixed;
-  padding: 1rem;
   left: ${(props) => (props.navOpen ? 0 : "-300px")};
   width: 300px;
   height: 100vh;
   display: flex;
   flex-direction: column;
   z-index: 1;
-  background-color: lightgray;
+  background-color: #eeeeee;
   overflow: auto;
   transition: left 0.3s ease-in-out;
 
   .set {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    margin: 0.5rem;
+    padding: 1rem;
+    height: 100px;
 
     img {
-      width: 120px;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
     }
 
-    &:hover > img {
-      filter: brightness(0.8);
+    &:hover {
+      background-color: lightgray;
     }
   }
 
-  input {
+  .search {
+    background-color: #eeeeee;
     position: sticky;
     top: 0;
+    padding: 0.5rem;
+
+    input {
+    }
   }
 `;
 
@@ -54,6 +67,18 @@ export function SideNav() {
   const sets = useSelector(selectSets);
   const setsLoading = useSelector(selectSetsLoading);
   const sidebar = useSelector(selectSidebar);
+  const sidebarSearchterm = useSelector(selectSidebarSearchterm);
+
+  const filteredSets = sets
+    ?.slice()
+    .filter((set) =>
+      set.name.toLowerCase().includes(sidebarSearchterm?.toLowerCase() ?? "")
+    )
+    .sort(
+      (a, b) =>
+        Math.abs(new Date(b.releaseDate).getTime()) -
+        Math.abs(new Date(a.releaseDate).getTime())
+    );
 
   useEffect(() => {
     dispatch(fetchSets());
@@ -64,32 +89,37 @@ export function SideNav() {
         <Spinner type="grow" color="primary" />
       ) : (
         <>
-          <Input type="text" placeholder="Search for set..." />
-          {sets
-            ?.slice()
-            .sort(
-              (a, b) =>
-                Math.abs(new Date(b.releaseDate).getTime()) -
-                Math.abs(new Date(a.releaseDate).getTime())
-            )
-            .map((set) => (
-              <div className="set" key={set.code}>
-                <img
-                  src={set.logoUrl}
-                  alt={set.name}
-                  onClick={() => {
-                    dispatch(
-                      fetchCardsBySet({
-                        set: set.name,
-                        pageSize: set.totalCards,
-                      })
-                    );
-                    dispatch(setSidebar(false));
-                  }}
-                />
-                <Progress value={50}>50/{set.totalCards}</Progress>
-              </div>
-            ))}
+          <div className="search">
+            <Input
+              type="text"
+              placeholder="Search for set..."
+              value={sidebarSearchterm ?? ""}
+              onChange={(event) =>
+                dispatch(setSidebarSearchterm(event.target.value))
+              }
+            />
+          </div>
+
+          {filteredSets?.map((set) => (
+            <div
+              className="set"
+              key={set.code}
+              onClick={() => {
+                dispatch(
+                  fetchCardsBySet({
+                    set: set.name,
+                    pageSize: set.totalCards,
+                  })
+                );
+                dispatch(setSidebar(false));
+                dispatch(setSidebarSearchterm(""));
+                dispatch(setSearchterm(""));
+              }}
+            >
+              <img src={set.logoUrl} alt={set.name} />
+              {/* <Progress value={50}>50/{set.totalCards}</Progress> */}
+            </div>
+          ))}
         </>
       )}
     </StyledNavContainer>

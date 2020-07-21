@@ -12,7 +12,7 @@ const StyledTopNav = styled.div`
   padding: 0.5rem;
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 999;
 
   p {
     margin: 0 0.5rem;
@@ -25,6 +25,8 @@ const StyledTopNav = styled.div`
 
   .menu-button {
     padding: 0.5rem;
+    display: flex;
+    align-items: center;
     cursor: pointer;
 
     &:hover {

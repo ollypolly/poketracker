@@ -37,6 +37,9 @@ const SetInfo = styled.div`
   }
 
   @media ${device.tablet} {
+    h1 {
+      font-size: 2rem;
+    }
     max-width: 800px;
   }
 `;
@@ -59,7 +62,9 @@ export default () => {
 
   const filteredCards = cards
     ?.slice()
-    .filter((card) => card.name.toLowerCase().includes(searchterm ?? ""));
+    .filter((card) =>
+      card.name.toLowerCase().includes(searchterm?.toLowerCase() ?? "")
+    );
 
   const currentSet = sets?.find((set) => set.name === (cards && cards[0].set));
 
