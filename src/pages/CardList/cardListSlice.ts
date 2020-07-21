@@ -84,7 +84,7 @@ export const selectCurrentSet = (state: RootState) =>
     (set) =>
       set.name ===
       (state.cardList.cardsForCurrentSet &&
-        state.cardList.cardsForCurrentSet[0].set)
+        state.cardList.cardsForCurrentSet[0]?.set)
   );
 
 export default cardListSlice.reducer;

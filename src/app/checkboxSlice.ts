@@ -3,10 +3,12 @@ import { RootState } from "./store";
 
 interface CheckedCardsState {
   checked: { [id: string]: string[] };
+  selectedSet: string;
 }
 
 const initialState: CheckedCardsState = {
   checked: {},
+  selectedSet: "Rebel Clash",
 };
 
 export const checkedCardsSlice = createSlice({
@@ -25,11 +27,17 @@ export const checkedCardsSlice = createSlice({
         state.checked[action.payload.set] = [action.payload.id];
       }
     },
+    setSelectedSet: (state, action) => {
+      state.selectedSet = action.payload;
+    },
   },
 });
 
-export const { checkCard } = checkedCardsSlice.actions;
+export const { checkCard, setSelectedSet } = checkedCardsSlice.actions;
 
 export const selectChecked = (state: RootState) => state.checkedCards.checked;
+
+export const selectSelectedSet = (state: RootState) =>
+  state.checkedCards.selectedSet;
 
 export default checkedCardsSlice.reducer;

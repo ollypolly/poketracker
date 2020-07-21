@@ -15,7 +15,7 @@ import { SideNav } from "../../components/Nav/SideNav";
 import { TopNav } from "../../components/Nav/TopNav";
 import moment from "moment";
 import { device } from "../../util/device";
-import { selectChecked } from "../../app/checkboxSlice";
+import { selectChecked, selectSelectedSet } from "../../app/checkboxSlice";
 
 const CardContainer = styled.div`
   display: flex;
@@ -53,16 +53,18 @@ export default () => {
   const checked = useSelector(selectChecked);
   const currentSet = useSelector(selectCurrentSet);
 
+  const selectedSet = useSelector(selectSelectedSet);
+
   const currentSetChecked = currentSet && checked[currentSet.code];
 
   useEffect(() => {
     dispatch(
       fetchCardsBySet({
-        set: "Rebel Clash",
+        set: selectedSet,
         pageSize: 220,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, selectedSet]);
 
   const filteredCards = cards
     ?.slice()

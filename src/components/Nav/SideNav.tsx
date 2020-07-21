@@ -15,7 +15,7 @@ import {
 } from "../../pages/CardList/cardListSlice";
 import { Spinner, Input, Progress } from "reactstrap";
 import styled from "styled-components";
-import { selectChecked } from "../../app/checkboxSlice";
+import { selectChecked, setSelectedSet } from "../../app/checkboxSlice";
 
 export interface Props {
   navOpen: boolean;
@@ -111,6 +111,7 @@ export function SideNav() {
                         pageSize: set.totalCards,
                       })
                     );
+                    dispatch(setSelectedSet(set.name));
                     dispatch(setSidebar(false));
                     dispatch(setSidebarSearchterm(""));
                     dispatch(setSearchterm(""));
