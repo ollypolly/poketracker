@@ -5,6 +5,9 @@ import { useSpring, animated } from "react-spring";
 import { Input, Label } from "reactstrap";
 import { useState } from "react";
 import { device } from "../../util/device";
+import { checkCard, selectChecked } from "../../app/checkboxSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentSet } from "../../pages/CardList/cardListSlice";
 
 interface Props {
   cardData: CardData;
@@ -148,6 +151,13 @@ const trans = (x: number, y: number, s: number) =>
   `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
 export default function Card({ cardData }: Props) {
+  const dispatch = useDispatch();
+  const currentSet = useSelector(selectCurrentSet);
+  const checked = useSelector(selectChecked);
+
+  const isCardChecked =
+    currentSet && checked[currentSet?.code]?.includes(cardData.id);
+
   const [props, set] = useSpring(() => ({
     xys: [0, 0, 1],
     config: { mass: 0.5, tension: 300, friction: 40 },
@@ -192,7 +202,19 @@ export default function Card({ cardData }: Props) {
             </DropdownMenu>
           </UncontrolledButtonDropdown> */}
           <StyledCheckbox check>
-            <Input type="checkbox" />
+            <Input
+              type="checkbox"
+              checked={isCardChecked ?? false}
+              onChange={() =>
+                dispatch(
+                  checkCard({
+                    set: currentSet?.code,
+                    id: cardData.id,
+                    currentChecked: isCardChecked,
+                  })
+                )
+              }
+            />
             <span className="checkmark"></span>
           </StyledCheckbox>
         </FlexContainer>

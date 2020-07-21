@@ -79,4 +79,12 @@ export const selectSearchterm = (state: RootState) => state.cardList.searchterm;
 export const selectSidebarSearchterm = (state: RootState) =>
   state.cardList.sidebarSearchterm;
 
+export const selectCurrentSet = (state: RootState) =>
+  state.cardList.sets?.find(
+    (set) =>
+      set.name ===
+      (state.cardList.cardsForCurrentSet &&
+        state.cardList.cardsForCurrentSet[0].set)
+  );
+
 export default cardListSlice.reducer;

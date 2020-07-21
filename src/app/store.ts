@@ -1,3 +1,4 @@
+import checkedCardsReducer from "./checkboxSlice";
 import {
   configureStore,
   ThunkAction,
@@ -9,6 +10,7 @@ import cardListReducer from "../pages/CardList/cardListSlice";
 export const store = configureStore({
   reducer: {
     cardList: cardListReducer,
+    checkedCards: checkedCardsReducer,
   },
   middleware: [...getDefaultMiddleware({ immutableCheck: false })],
 });
