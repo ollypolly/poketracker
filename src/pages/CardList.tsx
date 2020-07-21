@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { FaSearch, FaTimesCircle } from "react-icons/fa";
 import Card from "../components/Card/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCards, selectCardsLoading } from "./cardListSlice";
@@ -13,32 +12,9 @@ const CardContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-`;
 
-const StyledFilterContainer = styled.div`
-  display: flex;
-  align-items: top;
-
-  .clear {
-    cursor: pointer;
-  }
-
-  svg {
-    margin: 0.5rem;
-    margin-top: 10px;
-    font-size: 1.5em;
-  }
-`;
-
-const StyledInput = styled.input`
-  width: 100%;
-  border: none;
-  font-size: 1.2em;
-  border-bottom: 2px solid lightgray;
-  padding-bottom: 0.2em;
-  margin-bottom: 0.3em;
-  outline: none;
-  font-weight: 600;
+  max-width: 1100px;
+  margin: auto;
 `;
 
 export default () => {
@@ -46,17 +22,9 @@ export default () => {
   const cards = useSelector(selectCards);
   const cardsLoading = useSelector(selectCardsLoading);
 
-  const [searchTerm, setSearchTerm] = useState("");
-
   useEffect(() => {
     dispatch(fetchCardsBySet({ set: "Rebel Clash", pageSize: 192 }));
   }, [dispatch]);
-
-  const filteredEvents =
-    cards &&
-    [...cards].filter((card) =>
-      card.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
   return (
     <>
@@ -65,27 +33,11 @@ export default () => {
       {cardsLoading ? (
         <Spinner type="grow" color="primary" />
       ) : (
-        <>
-          <StyledFilterContainer>
-            <FaSearch />
-            <StyledInput
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-            />
-            {searchTerm && (
-              <FaTimesCircle
-                className="clear"
-                onClick={() => setSearchTerm("")}
-              />
-            )}
-          </StyledFilterContainer>
-          <CardContainer>
-            {filteredEvents?.map((event) => (
-              <Card key={event.id} cardData={event} />
-            ))}
-          </CardContainer>
-        </>
+        <CardContainer>
+          {cards?.map((card) => (
+            <Card key={card.id} cardData={card} />
+          ))}
+        </CardContainer>
       )}
     </>
   );

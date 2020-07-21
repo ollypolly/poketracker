@@ -61,6 +61,8 @@ const EventCardContainer = styled.div`
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
 `;
 
 const StyledCheckbox = styled(Label)`
@@ -94,7 +96,7 @@ const StyledCheckbox = styled(Label)`
   }
 
   input:checked ~ .checkmark {
-    background-color: #2196F3;
+    background-color: #2196f3;
   }
 
   .checkmark:after {
@@ -126,7 +128,7 @@ const cardHeight = 297;
 const calc = (x: number, y: number) => [
   -(y - cardWidth / 2) / 20,
   (x - cardHeight / 2) / 20,
-  1.05
+  1.05,
 ];
 const trans = (x: number, y: number, s: number) =>
   `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
@@ -134,7 +136,7 @@ const trans = (x: number, y: number, s: number) =>
 export default function Card({ cardData }: Props) {
   const [props, set] = useSpring(() => ({
     xys: [0, 0, 1],
-    config: { mass: 0.5, tension: 300, friction: 40 }
+    config: { mass: 0.5, tension: 300, friction: 40 },
   }));
 
   const [disableAnimation, setDisableAnimation] = useState(false);
@@ -151,9 +153,8 @@ export default function Card({ cardData }: Props) {
         if (!disableAnimation) {
           set({ xys: calc(offsetX, offsetY) });
         } else {
-          set({ xys: [0, 0, 1] })
+          set({ xys: [0, 0, 1] });
         }
-
       }}
       onMouseLeave={() => set({ xys: [0, 0, 1] })}
       //@ts-ignore
@@ -161,12 +162,13 @@ export default function Card({ cardData }: Props) {
     >
       <EventCardContainer
         style={{
-          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0) ), url(${
-            cardData.imageUrl
-            })`
+          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0) ), url(${cardData.imageUrl})`,
         }}
       >
-        <FlexContainer onMouseEnter={() => setDisableAnimation(true)} onMouseLeave={() => setDisableAnimation(false)}>
+        <FlexContainer
+          onMouseEnter={() => setDisableAnimation(true)}
+          onMouseLeave={() => setDisableAnimation(false)}
+        >
           {/* <UncontrolledButtonDropdown >
             <DropdownToggle>
               <FaEllipsisV />
@@ -179,7 +181,6 @@ export default function Card({ cardData }: Props) {
             <Input type="checkbox" />
             <span className="checkmark"></span>
           </StyledCheckbox>
-
         </FlexContainer>
       </EventCardContainer>
     </animated.div>

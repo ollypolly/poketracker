@@ -5,8 +5,9 @@ import {
   selectSets,
   selectSetsLoading,
   selectSidebar,
+  setSidebar,
 } from "../../pages/cardListSlice";
-import { Spinner, Progress } from "reactstrap";
+import { Spinner, Progress, Input } from "reactstrap";
 import styled from "styled-components";
 
 export interface Props {
@@ -38,6 +39,11 @@ const StyledNavContainer = styled.div<Props>`
       filter: brightness(0.8);
     }
   }
+
+  input {
+    position: sticky;
+    top: 0;
+  }
 `;
 
 export function SideNav() {
@@ -54,27 +60,34 @@ export function SideNav() {
       {setsLoading ? (
         <Spinner type="grow" color="primary" />
       ) : (
-        sets
-          ?.slice()
-          .sort(
-            (a, b) =>
-              Math.abs(new Date(b.releaseDate).getTime()) -
-              Math.abs(new Date(a.releaseDate).getTime())
-          )
-          .map((set) => (
-            <div className="set" key={set.code}>
-              <img
-                src={set.logoUrl}
-                alt={set.name}
-                onClick={() =>
-                  dispatch(
-                    fetchCardsBySet({ set: set.name, pageSize: set.totalCards })
-                  )
-                }
-              />
-              <Progress value={25}>25/100</Progress>
-            </div>
-          ))
+        <>
+          <Input type="text" placeholder="Search for set..." />
+          {sets
+            ?.slice()
+            .sort(
+              (a, b) =>
+                Math.abs(new Date(b.releaseDate).getTime()) -
+                Math.abs(new Date(a.releaseDate).getTime())
+            )
+            .map((set) => (
+              <div className="set" key={set.code}>
+                <img
+                  src={set.logoUrl}
+                  alt={set.name}
+                  onClick={() => {
+                    dispatch(
+                      fetchCardsBySet({
+                        set: set.name,
+                        pageSize: set.totalCards,
+                      })
+                    );
+                    dispatch(setSidebar(false));
+                  }}
+                />
+                <Progress value={25}>25/100</Progress>
+              </div>
+            ))}
+        </>
       )}
     </StyledNavContainer>
   );

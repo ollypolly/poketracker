@@ -6,9 +6,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectSidebar, setSidebar } from "../../pages/cardListSlice";
 
 const StyledTopNav = styled.div`
+  display: flex;
+  background-color: gray;
+  padding: 0.5rem;
   position: sticky;
   top: 0;
   z-index: 2;
+
+  .menu-button {
+    padding: 0.5rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: lightgray;
+    }
+  }
 `;
 
 export function TopNav() {
@@ -16,7 +28,13 @@ export function TopNav() {
   const sidebar = useSelector(selectSidebar);
   return (
     <StyledTopNav>
-      <FaBars onClick={() => dispatch(setSidebar(!sidebar))} />
+      <div
+        className="menu-button"
+        onClick={() => dispatch(setSidebar(!sidebar))}
+      >
+        <FaBars />
+      </div>
+
       <Input type="text" placeholder="Search card list..." />
     </StyledTopNav>
   );
