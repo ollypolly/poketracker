@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Card from "../../components/Card/Card";
+import Card, { StyledCheckbox } from "../../components/Card/Card";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCards,
@@ -57,6 +57,8 @@ export default () => {
 
   const currentSetChecked = currentSet && checked[currentSet.code];
 
+  const [filterCollected, setFilterCollected] = useState(false);
+
   useEffect(() => {
     dispatch(
       fetchCardsBySet({
@@ -69,7 +71,11 @@ export default () => {
   const filteredCards = cards
     ?.slice()
     .filter((card) =>
-      card.name.toLowerCase().includes(searchterm?.toLowerCase() ?? "")
+      filterCollected
+        ? currentSet &&
+          !checked[currentSet?.code]?.includes(card.id) &&
+          card.name.toLowerCase().includes(searchterm?.toLowerCase() ?? "")
+        : card.name.toLowerCase().includes(searchterm?.toLowerCase() ?? "")
     )
     .sort((a, b) => parseInt(a.number) - parseInt(b.number));
 
@@ -115,6 +121,15 @@ export default () => {
               value={searchterm ?? ""}
               onChange={(event) => dispatch(setSearchterm(event.target.value))}
             />
+            <StyledCheckbox check>
+              <Input
+                type="checkbox"
+                checked={filterCollected}
+                onChange={() => setFilterCollected(!filterCollected)}
+              />
+              <span className="checkmark"></span>
+              Not collected
+            </StyledCheckbox>
           </SetInfo>
 
           <CardContainer>

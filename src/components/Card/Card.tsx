@@ -92,13 +92,14 @@ const FlexContainer = styled.div`
   justify-content: space-between;
 `;
 
-const StyledCheckbox = styled(Label)`
+export const StyledCheckbox = styled(Label)`
   display: block;
   position: relative;
   padding-left: 35px;
+  margin-top: 12px;
   margin-bottom: 12px;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 15px;
   user-select: none;
 
   input {
