@@ -4,6 +4,7 @@ import { CardData } from "../../model/card.model";
 import { useSpring, animated } from "react-spring";
 import { Input, Label } from "reactstrap";
 import { useState } from "react";
+import { device } from "../../util/device";
 
 interface Props {
   cardData: CardData;
@@ -56,6 +57,12 @@ const EventCardContainer = styled.div`
   p {
     color: lightgray;
   }
+
+  @media ${device.tablet} {
+    width: 146px;
+    height: 200px;
+    margin: 0.2rem;
+  }
 `;
 
 const FlexContainer = styled.div`
@@ -92,11 +99,11 @@ const StyledCheckbox = styled(Label)`
   }
 
   &:hover input ~ .checkmark {
-    background-color: #ccc;
+    background-color: lightgreen;
   }
 
   input:checked ~ .checkmark {
-    background-color: #2196f3;
+    background-color: green;
   }
 
   .checkmark:after {

@@ -1,10 +1,16 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import cardListReducer from '../pages/cardListSlice';
+import {
+  configureStore,
+  ThunkAction,
+  Action,
+  getDefaultMiddleware,
+} from "@reduxjs/toolkit";
+import cardListReducer from "../pages/cardListSlice";
 
 export const store = configureStore({
   reducer: {
     cardList: cardListReducer,
   },
+  middleware: [...getDefaultMiddleware({ immutableCheck: false })],
 });
 
 export type RootState = ReturnType<typeof store.getState>;

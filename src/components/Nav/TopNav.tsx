@@ -3,7 +3,12 @@ import { FaBars } from "react-icons/fa";
 import styled from "styled-components";
 import { Input } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSidebar, setSidebar } from "../../pages/cardListSlice";
+import {
+  selectSidebar,
+  setSidebar,
+  setSearchterm,
+  selectSearchterm,
+} from "../../pages/cardListSlice";
 
 const StyledTopNav = styled.div`
   display: flex;
@@ -26,6 +31,7 @@ const StyledTopNav = styled.div`
 export function TopNav() {
   const dispatch = useDispatch();
   const sidebar = useSelector(selectSidebar);
+  const searchterm = useSelector(selectSearchterm);
   return (
     <StyledTopNav>
       <div
@@ -35,7 +41,12 @@ export function TopNav() {
         <FaBars />
       </div>
 
-      <Input type="text" placeholder="Search card list..." />
+      <Input
+        type="text"
+        placeholder="Search card list..."
+        value={searchterm ?? ""}
+        onChange={(event) => dispatch(setSearchterm(event.target.value))}
+      />
     </StyledTopNav>
   );
 }

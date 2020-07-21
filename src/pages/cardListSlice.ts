@@ -9,6 +9,7 @@ interface CardListState {
   sets?: SetData[];
   setsLoading: boolean;
   sidebar: boolean;
+  searchterm?: string;
 }
 
 const initialState: CardListState = {
@@ -23,6 +24,9 @@ export const cardListSlice = createSlice({
   reducers: {
     setSidebar: (state, action) => {
       state.sidebar = action.payload;
+    },
+    setSearchterm: (state, action) => {
+      state.searchterm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -49,7 +53,7 @@ export const cardListSlice = createSlice({
   },
 });
 
-export const { setSidebar } = cardListSlice.actions;
+export const { setSidebar, setSearchterm } = cardListSlice.actions;
 
 export const selectCards = (state: RootState) =>
   state.cardList.cardsForCurrentSet;
@@ -61,5 +65,7 @@ export const selectSetsLoading = (state: RootState) =>
   state.cardList.setsLoading;
 
 export const selectSidebar = (state: RootState) => state.cardList.sidebar;
+
+export const selectSearchterm = (state: RootState) => state.cardList.searchterm;
 
 export default cardListSlice.reducer;
