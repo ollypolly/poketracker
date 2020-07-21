@@ -1,14 +1,8 @@
 import React from "react";
 import { FaBars } from "react-icons/fa";
 import styled from "styled-components";
-import { Input } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  selectSidebar,
-  setSidebar,
-  setSearchterm,
-  selectSearchterm,
-} from "../../pages/CardList/cardListSlice";
+import { selectSidebar, setSidebar } from "../../pages/CardList/cardListSlice";
 
 const StyledTopNav = styled.div`
   display: flex;
