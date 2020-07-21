@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FaSearch, FaTimesCircle, FaAlignLeft } from "react-icons/fa";
+import { FaSearch, FaTimesCircle } from "react-icons/fa";
 import Card from "../components/Card/Card";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectCards,
-  selectCardsLoading,
-  selectSidebar,
-  setSidebar,
-} from "./cardListSlice";
+import { selectCards, selectCardsLoading } from "./cardListSlice";
 import { fetchCardsBySet } from "./cardListThunks";
-import { Spinner, Button } from "reactstrap";
-import { Nav } from "../components/Nav/Nav";
+import { Spinner } from "reactstrap";
+import { SideNav } from "../components/Nav/SideNav";
+import { TopNav } from "../components/Nav/TopNav";
 
 const CardContainer = styled.div`
   display: flex;
@@ -49,7 +45,7 @@ export default () => {
   const dispatch = useDispatch();
   const cards = useSelector(selectCards);
   const cardsLoading = useSelector(selectCardsLoading);
-  const sidebar = useSelector(selectSidebar);
+
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -64,10 +60,8 @@ export default () => {
 
   return (
     <>
-      <Nav />
-      <Button color="info" onClick={() => dispatch(setSidebar(!sidebar))}>
-        <FaAlignLeft />
-      </Button>
+      <TopNav />
+      <SideNav />
       {cardsLoading ? (
         <Spinner type="grow" color="primary" />
       ) : (

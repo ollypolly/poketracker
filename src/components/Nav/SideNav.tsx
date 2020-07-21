@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSets, fetchCardsBySet } from "../../pages/cardListThunks";
-import { selectSets, selectSetsLoading } from "../../pages/cardListSlice";
-import { Spinner, Progress, Button } from "reactstrap";
+import {
+  selectSets,
+  selectSetsLoading,
+  selectSidebar,
+} from "../../pages/cardListSlice";
+import { Spinner, Progress } from "reactstrap";
 import styled from "styled-components";
-import { FaBars } from "react-icons/fa";
 
-const StyledNavContainer = styled.div`
+export interface Props {
+  navOpen: boolean;
+}
+
+const StyledNavContainer = styled.div<Props>`
   position: fixed;
   padding: 1rem;
-  left: 0;
+  left: ${(props) => (props.navOpen ? 0 : "-250px")};
   width: 250px;
   height: 100vh;
   display: flex;
@@ -17,6 +24,7 @@ const StyledNavContainer = styled.div`
   z-index: 1;
   background-color: lightgray;
   overflow: auto;
+  transition: left 0.3s ease-in-out;
 
   .set {
     cursor: pointer;
@@ -32,22 +40,17 @@ const StyledNavContainer = styled.div`
   }
 `;
 
-export function Nav() {
+export function SideNav() {
   const dispatch = useDispatch();
   const sets = useSelector(selectSets);
   const setsLoading = useSelector(selectSetsLoading);
-
-  const [showMenu, setShowMenu] = useState(false);
+  const sidebar = useSelector(selectSidebar);
 
   useEffect(() => {
     dispatch(fetchSets());
   }, [dispatch]);
   return (
-    <StyledNavContainer>
-      <Button>
-        <FaBars />
-      </Button>
-
+    <StyledNavContainer navOpen={sidebar}>
       {setsLoading ? (
         <Spinner type="grow" color="primary" />
       ) : (
