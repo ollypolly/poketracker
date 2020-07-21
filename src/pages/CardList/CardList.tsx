@@ -70,7 +70,8 @@ export default () => {
     ?.slice()
     .filter((card) =>
       card.name.toLowerCase().includes(searchterm?.toLowerCase() ?? "")
-    );
+    )
+    .sort((a, b) => parseInt(a.number) - parseInt(b.number));
 
   return (
     <>
