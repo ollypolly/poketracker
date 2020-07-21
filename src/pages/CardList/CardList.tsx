@@ -6,8 +6,8 @@ import {
   selectCards,
   selectCardsLoading,
   selectSearchterm,
-  selectSets,
   setSearchterm,
+  selectCurrentSet,
 } from "./cardListSlice";
 import { fetchCardsBySet } from "./cardListThunks";
 import { Spinner, Input, Progress } from "reactstrap";
@@ -15,6 +15,7 @@ import { SideNav } from "../../components/Nav/SideNav";
 import { TopNav } from "../../components/Nav/TopNav";
 import moment from "moment";
 import { device } from "../../util/device";
+import { selectChecked } from "../../app/checkboxSlice";
 
 const CardContainer = styled.div`
   display: flex;
@@ -49,7 +50,10 @@ export default () => {
   const cards = useSelector(selectCards);
   const cardsLoading = useSelector(selectCardsLoading);
   const searchterm = useSelector(selectSearchterm);
-  const sets = useSelector(selectSets);
+  const checked = useSelector(selectChecked);
+  const currentSet = useSelector(selectCurrentSet);
+
+  const currentSetChecked = currentSet && checked[currentSet.code];
 
   useEffect(() => {
     dispatch(
@@ -65,8 +69,6 @@ export default () => {
     .filter((card) =>
       card.name.toLowerCase().includes(searchterm?.toLowerCase() ?? "")
     );
-
-  const currentSet = sets?.find((set) => set.name === (cards && cards[0].set));
 
   return (
     <>
@@ -89,10 +91,20 @@ export default () => {
               <h1>{currentSet?.name}</h1>
             </div>
             <small>
-              Released {moment(currentSet?.releaseDate).format("LL")}
+              Released{" "}
+              {currentSet &&
+                moment(new Date(currentSet.releaseDate)).format("LL")}
               {currentSet?.standardLegal && " • Standard"}
             </small>
-            <Progress value={50}>50/{currentSet?.totalCards}</Progress>
+            <Progress
+              value={
+                currentSetChecked &&
+                currentSet &&
+                (currentSetChecked.length / currentSet.totalCards) * 100
+              }
+            >
+              {currentSetChecked?.length}/{currentSet?.totalCards}
+            </Progress>
 
             <Input
               type="text"
