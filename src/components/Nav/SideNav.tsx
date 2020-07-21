@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSets, fetchCardsBySet } from "../../pages/cardListThunks";
+import {
+  fetchSets,
+  fetchCardsBySet,
+} from "../../pages/CardList/cardListThunks";
 import {
   selectSets,
   selectSetsLoading,
   selectSidebar,
   setSidebar,
-} from "../../pages/cardListSlice";
+} from "../../pages/CardList/cardListSlice";
 import { Spinner, Progress, Input } from "reactstrap";
 import styled from "styled-components";
 
@@ -17,8 +20,8 @@ export interface Props {
 const StyledNavContainer = styled.div<Props>`
   position: fixed;
   padding: 1rem;
-  left: ${(props) => (props.navOpen ? 0 : "-250px")};
-  width: 250px;
+  left: ${(props) => (props.navOpen ? 0 : "-300px")};
+  width: 300px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -84,7 +87,7 @@ export function SideNav() {
                     dispatch(setSidebar(false));
                   }}
                 />
-                <Progress value={25}>25/100</Progress>
+                <Progress value={50}>50/{set.totalCards}</Progress>
               </div>
             ))}
         </>

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { request } from "../network/request";
+import { request } from "../../network/request";
 
 export const fetchCardsBySet = createAsyncThunk(
   "fetch/cardsBySet",

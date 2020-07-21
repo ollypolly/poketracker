@@ -63,6 +63,12 @@ const EventCardContainer = styled.div`
     height: 200px;
     margin: 0.2rem;
   }
+
+  @media ${device.mobileL} {
+    width: 110px;
+    height: 150px;
+    margin: 0.2rem;
+  }
 `;
 
 const FlexContainer = styled.div`

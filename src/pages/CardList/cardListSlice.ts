@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
-import { CardData, SetData } from "../model/card.model";
+import { RootState } from "../../app/store";
+import { CardData, SetData } from "../../model/card.model";
 import { fetchCardsBySet, fetchSets } from "./cardListThunks";
 
 interface CardListState {

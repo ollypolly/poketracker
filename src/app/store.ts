@@ -4,7 +4,7 @@ import {
   Action,
   getDefaultMiddleware,
 } from "@reduxjs/toolkit";
-import cardListReducer from "../pages/cardListSlice";
+import cardListReducer from "../pages/CardList/cardListSlice";
 
 export const store = configureStore({
   reducer: {

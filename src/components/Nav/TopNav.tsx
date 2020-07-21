@@ -8,15 +8,26 @@ import {
   setSidebar,
   setSearchterm,
   selectSearchterm,
-} from "../../pages/cardListSlice";
+} from "../../pages/CardList/cardListSlice";
 
 const StyledTopNav = styled.div`
   display: flex;
-  background-color: gray;
+  align-items: center;
+  background-color: white;
+  border-bottom: 2px solid gray;
   padding: 0.5rem;
   position: sticky;
   top: 0;
   z-index: 2;
+
+  p {
+    margin: 0 0.5rem;
+    margin-right: 1rem;
+    font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
+    font-weight: 800;
+  }
 
   .menu-button {
     padding: 0.5rem;
@@ -31,7 +42,6 @@ const StyledTopNav = styled.div`
 export function TopNav() {
   const dispatch = useDispatch();
   const sidebar = useSelector(selectSidebar);
-  const searchterm = useSelector(selectSearchterm);
   return (
     <StyledTopNav>
       <div
@@ -40,13 +50,7 @@ export function TopNav() {
       >
         <FaBars />
       </div>
-
-      <Input
-        type="text"
-        placeholder="Search card list..."
-        value={searchterm ?? ""}
-        onChange={(event) => dispatch(setSearchterm(event.target.value))}
-      />
+      <p>PokéTrack</p>
     </StyledTopNav>
   );
 }
