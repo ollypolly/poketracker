@@ -169,10 +169,7 @@ export default () => {
           <ZoomedCard
             toggle={toggle}
             isOpen={modal}
-            cardData={
-              filteredCards &&
-              filteredCards.find((card) => clickedCardId === card.id)
-            }
+            cardData={filteredCards?.find((card) => clickedCardId === card.id)}
           />
         </>
       )}
