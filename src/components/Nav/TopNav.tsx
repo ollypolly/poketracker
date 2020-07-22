@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBars, FaSun } from "react-icons/fa";
+import { FaBars, FaSun, FaMoon } from "react-icons/fa";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -73,7 +73,7 @@ export function TopNav() {
           className="menu-button"
           onClick={() => dispatch(setDarkMode(!darkMode))}
         >
-          <FaSun />
+          {darkMode ? <FaSun /> : <FaMoon />}
         </div>
         <p>PokéTrack</p>
       </Box>
