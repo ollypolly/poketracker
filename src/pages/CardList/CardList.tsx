@@ -35,9 +35,14 @@ const SetInfo = styled.div`
 
   p {
     margin-left: 0.8rem;
+    margin-right: 0.8rem;
     font-weight: 200;
     margin-bottom: 0;
     font-size: 1.5rem;
+  }
+
+  small {
+    font-weight: 200;
   }
 
   input,
@@ -120,6 +125,9 @@ export default () => {
                   : 0}
                 %
               </p>
+              <small>
+                {currentSetChecked?.length ?? 0}/{currentSet?.totalCards}
+              </small>
             </div>
             <small>
               Released{" "}

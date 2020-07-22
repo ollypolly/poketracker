@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaSun } from "react-icons/fa";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -8,14 +8,18 @@ import {
   selectCurrentSet,
   selectCardsLoading,
 } from "../../pages/CardList/cardListSlice";
-import { selectChecked } from "../../app/checkboxSlice";
+import {
+  selectChecked,
+  selectDarkMode,
+  setDarkMode,
+} from "../../app/checkboxSlice";
 
 const StyledTopNav = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
-  border-bottom: 2px solid gray;
+  background-color: ${({ theme }) => theme.body};
+  border-bottom: 2px solid #37a9f8;
   padding: 0.5rem;
   position: sticky;
   top: 0;
@@ -36,7 +40,7 @@ const StyledTopNav = styled.div`
     cursor: pointer;
 
     &:hover {
-      background-color: lightgray;
+      background-color: ${({ theme }) => theme.hover};
     }
   }
 `;
@@ -52,6 +56,7 @@ export function TopNav() {
   const currentSet = useSelector(selectCurrentSet);
   const checked = useSelector(selectChecked);
   const cardsLoading = useSelector(selectCardsLoading);
+  const darkMode = useSelector(selectDarkMode);
 
   const currentSetChecked = currentSet && checked[currentSet.code];
 
@@ -63,6 +68,12 @@ export function TopNav() {
           onClick={() => dispatch(setSidebar(!sidebar))}
         >
           <FaBars />
+        </div>
+        <div
+          className="menu-button"
+          onClick={() => dispatch(setDarkMode(!darkMode))}
+        >
+          <FaSun />
         </div>
         <p>PokéTrack</p>
       </Box>

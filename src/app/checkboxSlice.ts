@@ -4,6 +4,7 @@ import { RootState } from "./store";
 interface CheckedCardsState {
   checked: { [id: string]: string[] };
   selectedSet: string;
+  darkMode?: boolean;
 }
 
 const initialState: CheckedCardsState = {
@@ -30,14 +31,23 @@ export const checkedCardsSlice = createSlice({
     setSelectedSet: (state, action) => {
       state.selectedSet = action.payload;
     },
+    setDarkMode: (state, action) => {
+      state.darkMode = action.payload;
+    },
   },
 });
 
-export const { checkCard, setSelectedSet } = checkedCardsSlice.actions;
+export const {
+  checkCard,
+  setSelectedSet,
+  setDarkMode,
+} = checkedCardsSlice.actions;
 
 export const selectChecked = (state: RootState) => state.checkedCards.checked;
 
 export const selectSelectedSet = (state: RootState) =>
   state.checkedCards.selectedSet;
+
+export const selectDarkMode = (state: RootState) => state.checkedCards.darkMode;
 
 export default checkedCardsSlice.reducer;

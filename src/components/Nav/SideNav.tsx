@@ -29,10 +29,11 @@ const StyledNavContainer = styled.div<Props>`
   display: flex;
   flex-direction: column;
   z-index: 1;
-  background-color: #eeeeee;
+  background-color: ${({ theme }) => theme.body};
   overflow: auto;
   transition: left 0.3s ease-in-out;
   display: inline-block;
+  border-right: 2px solid #37a9f8;
 
   .set {
     cursor: pointer;
@@ -44,12 +45,11 @@ const StyledNavContainer = styled.div<Props>`
     transition: all 0.4s ease 0s;
 
     &:hover {
-      background-color: lightgray;
+      background-color: ${({ theme }) => theme.hover};
     }
   }
 
   .search {
-    background-color: #eeeeee;
     position: sticky;
     top: 0;
     padding: 0.5rem;
@@ -97,6 +97,12 @@ export function SideNav() {
               }
             />
           </div>
+          {/* <Button size="sm" className="my-2">
+            <FaDownload /> Download collection
+          </Button>
+          <Button size="sm" className="mb-3">
+            <FaUpload /> Restore collection
+          </Button> */}
 
           {filteredSets?.map((set) => {
             const currentSetChecked = set && checked[set.code];
