@@ -1,10 +1,17 @@
 import React from "react";
+import { Modal } from "reactstrap";
+import Card from "../Card/Card";
 
-export default function ZoomedCard() {
+const ZoomedCard = (props: any) => {
+  const { className } = props;
+
   return (
-    <p>
-      Popup modal Bigger version of Card with Hi Res image and card info/call to
-      actions
-    </p>
+    <div>
+      <Modal isOpen={props.isOpen} toggle={props.toggle} className={className}>
+        <Card hiRes cardData={props.cardData} />
+      </Modal>
+    </div>
   );
-}
+};
+
+export default ZoomedCard;

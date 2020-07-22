@@ -16,6 +16,7 @@ import { TopNav } from "../../components/Nav/TopNav";
 import moment from "moment";
 import { device } from "../../util/device";
 import { selectChecked, selectSelectedSet } from "../../app/checkboxSlice";
+import ZoomedCard from "../../components/ZoomedCardView/ZoomedCard";
 
 const CardContainer = styled.div`
   display: flex;
@@ -28,14 +29,15 @@ const CardContainer = styled.div`
 
 const SetInfo = styled.div`
   text-align: left;
-  align-items: baseline;
   max-width: 1000px;
   margin: 1rem auto;
   padding: 0 1rem;
 
   p {
     margin-left: 0.8rem;
+    font-weight: 200;
     margin-bottom: 0;
+    font-size: 1.5rem;
   }
 
   input,
@@ -64,6 +66,11 @@ export default () => {
   const currentSetChecked = currentSet && checked[currentSet.code];
 
   const [filterCollected, setFilterCollected] = useState(false);
+
+  const [modal, setModal] = useState(false);
+  const [clickedCardId, setClickedCardId] = useState<string | undefined>();
+
+  const toggle = () => setModal(!modal);
 
   useEffect(() => {
     dispatch(
@@ -96,7 +103,7 @@ export default () => {
       ) : (
         <>
           <SetInfo>
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-baseline">
               <img
                 height="30"
                 className="mr-2"
@@ -149,9 +156,25 @@ export default () => {
 
           <CardContainer>
             {filteredCards?.map((card) => (
-              <Card key={card.id} cardData={card} />
+              <div
+                key={card.id}
+                onClick={() => {
+                  setClickedCardId(card.id);
+                  setModal(true);
+                }}
+              >
+                <Card cardData={card} />
+              </div>
             ))}
           </CardContainer>
+          <ZoomedCard
+            toggle={toggle}
+            isOpen={modal}
+            cardData={
+              filteredCards &&
+              filteredCards.find((card) => clickedCardId === card.id)
+            }
+          />
         </>
       )}
     </>

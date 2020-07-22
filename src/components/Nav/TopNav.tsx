@@ -22,7 +22,7 @@ const StyledTopNav = styled.div`
   z-index: 999;
 
   p {
-    margin: 0 0.5rem;
+    margin: 0 0.2rem;
     font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
       "Segoe UI Symbol";
@@ -70,7 +70,7 @@ export function TopNav() {
       {!cardsLoading && (
         <Box>
           <p>{currentSet?.name}</p>
-          <p>
+          <p className="font-weight-light">
             {currentSetChecked
               ? currentSet &&
                 Math.round(

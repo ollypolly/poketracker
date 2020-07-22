@@ -11,6 +11,7 @@ import { selectCurrentSet } from "../../pages/CardList/cardListSlice";
 
 interface Props {
   cardData: CardData;
+  hiRes?: boolean;
 }
 
 const EventCardContainer = styled.div`
@@ -161,7 +162,7 @@ const calc = (x: number, y: number) => [
 const trans = (x: number, y: number, s: number) =>
   `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
-export default function Card({ cardData }: Props) {
+export default function Card({ cardData, hiRes }: Props) {
   const dispatch = useDispatch();
   const currentSet = useSelector(selectCurrentSet);
   const checked = useSelector(selectChecked);
@@ -198,47 +199,43 @@ export default function Card({ cardData }: Props) {
     >
       <EventCardContainer
         style={{
-          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8) ), url(${cardData.imageUrl})`,
+          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8) ), url(${
+            hiRes ? cardData.imageUrlHiRes : cardData.imageUrl
+          })`,
         }}
       >
-        <FlexContainer>
-          {/* <UncontrolledButtonDropdown >
-            <DropdownToggle>
-              <FaEllipsisV />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem>Add to deck</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledButtonDropdown> */}
-          <StyledCheckbox
-            onMouseEnter={() => setDisableAnimation(true)}
-            onMouseLeave={() => setDisableAnimation(false)}
-            check
-          >
-            <Input
-              type="checkbox"
-              checked={isCardChecked ?? false}
-              onChange={() =>
-                dispatch(
-                  checkCard({
-                    set: currentSet?.code,
-                    id: cardData.id,
-                    currentChecked: isCardChecked,
-                  })
-                )
-              }
-            />
-            <span className="checkmark"></span>
-          </StyledCheckbox>
-          <div className="card-info">
-            <h2>
-              #{cardData.number} {cardData.name}
-            </h2>
-            <h3>
-              {cardData.rarity} {cardData.subtype} {cardData.supertype}
-            </h3>
-          </div>
-        </FlexContainer>
+        {!hiRes && (
+          <FlexContainer>
+            <StyledCheckbox
+              onMouseEnter={() => setDisableAnimation(true)}
+              onMouseLeave={() => setDisableAnimation(false)}
+              check
+            >
+              <Input
+                type="checkbox"
+                checked={isCardChecked ?? false}
+                onChange={() =>
+                  dispatch(
+                    checkCard({
+                      set: currentSet?.code,
+                      id: cardData.id,
+                      currentChecked: isCardChecked,
+                    })
+                  )
+                }
+              />
+              <span className="checkmark"></span>
+            </StyledCheckbox>
+            <div className="card-info">
+              <h2>
+                #{cardData.number} {cardData.name}
+              </h2>
+              <h3>
+                {cardData.rarity} {cardData.subtype} {cardData.supertype}
+              </h3>
+            </div>
+          </FlexContainer>
+        )}
       </EventCardContainer>
     </animated.div>
   );
