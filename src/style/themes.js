@@ -19,4 +19,16 @@ export const GlobalStyles = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-  }`;
+  }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-weight: 700;
+    }
+
+    .modal-backdrop.show {
+        opacity: 0.8 !important;
+    }
+  `;
