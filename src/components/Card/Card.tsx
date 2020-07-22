@@ -12,6 +12,7 @@ import { selectCurrentSet } from "../../pages/CardList/cardListSlice";
 interface Props {
   cardData: CardData;
   hiRes?: boolean;
+  onClick?: () => void;
 }
 
 interface ContainerProps {
@@ -165,7 +166,7 @@ const calc = (x: number, y: number) => [
 const trans = (x: number, y: number, s: number) =>
   `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
-export default function Card({ cardData, hiRes }: Props) {
+export default function Card({ cardData, hiRes, onClick }: Props) {
   const dispatch = useDispatch();
   const currentSet = useSelector(selectCurrentSet);
   const checked = useSelector(selectChecked);
@@ -198,7 +199,7 @@ export default function Card({ cardData, hiRes }: Props) {
       onMouseLeave={() => set({ xys: [0, 0, 1] })}
       //@ts-ignore
       style={{ transform: props.xys.interpolate(trans) }}
-      onClick={() => {}}
+      onClick={() => onClick && onClick()}
     >
       <EventCardContainer
         hiRes={hiRes}
@@ -214,19 +215,22 @@ export default function Card({ cardData, hiRes }: Props) {
               onMouseEnter={() => setDisableAnimation(true)}
               onMouseLeave={() => setDisableAnimation(false)}
               check
+              onClick={(event: any) => {
+                event.stopPropagation();
+              }}
             >
               <Input
                 type="checkbox"
                 checked={isCardChecked ?? false}
-                onChange={() =>
+                onChange={() => {
                   dispatch(
                     checkCard({
                       set: currentSet?.code,
                       id: cardData.id,
                       currentChecked: isCardChecked,
                     })
-                  )
-                }
+                  );
+                }}
               />
               <span className="checkmark"></span>
             </StyledCheckbox>

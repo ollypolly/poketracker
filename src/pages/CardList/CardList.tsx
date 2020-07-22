@@ -156,15 +156,14 @@ export default () => {
 
           <CardContainer>
             {filteredCards?.map((card) => (
-              <div
+              <Card
                 key={card.id}
+                cardData={card}
                 onClick={() => {
                   setClickedCardId(card.id);
                   setModal(true);
                 }}
-              >
-                <Card cardData={card} />
-              </div>
+              />
             ))}
           </CardContainer>
           <ZoomedCard
