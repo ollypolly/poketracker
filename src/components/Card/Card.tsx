@@ -14,13 +14,16 @@ interface Props {
   hiRes?: boolean;
 }
 
-const EventCardContainer = styled.div`
-  width: 245px;
-  height: 342px;
+interface ContainerProps {
+  hiRes?: boolean;
+}
+
+const EventCardContainer = styled.div<ContainerProps>`
+  width: ${(props) => (props.hiRes ? "400px" : "245px")};
+  height: ${(props) => (props.hiRes ? "567px" : "342px")};
   margin: 0.5rem;
   padding: 1rem;
   border-radius: 10px;
-
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -79,8 +82,8 @@ const EventCardContainer = styled.div`
   }
 
   @media ${device.mobileL} {
-    width: 115px;
-    height: 160px;
+    width: ${(props) => (props.hiRes ? "100%" : "115px")};
+    height: ${(props) => (props.hiRes ? "500px" : "160px")};
     margin: 0.2rem;
     border-radius: 5px;
   }
@@ -198,10 +201,11 @@ export default function Card({ cardData, hiRes }: Props) {
       onClick={() => {}}
     >
       <EventCardContainer
+        hiRes={hiRes}
         style={{
-          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8) ), url(${
-            hiRes ? cardData.imageUrlHiRes : cardData.imageUrl
-          })`,
+          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, ${
+            hiRes ? 0 : 0.8
+          }) ), url(${hiRes ? cardData.imageUrlHiRes : cardData.imageUrl})`,
         }}
       >
         {!hiRes && (
