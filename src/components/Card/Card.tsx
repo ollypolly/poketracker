@@ -194,6 +194,7 @@ export default function Card({ cardData }: Props) {
       onMouseLeave={() => set({ xys: [0, 0, 1] })}
       //@ts-ignore
       style={{ transform: props.xys.interpolate(trans) }}
+      onClick={() => {}}
     >
       <EventCardContainer
         style={{

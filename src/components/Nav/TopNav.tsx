@@ -2,10 +2,17 @@ import React from "react";
 import { FaBars } from "react-icons/fa";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSidebar, setSidebar } from "../../pages/CardList/cardListSlice";
+import {
+  selectSidebar,
+  setSidebar,
+  selectCurrentSet,
+  selectCardsLoading,
+} from "../../pages/CardList/cardListSlice";
+import { selectChecked } from "../../app/checkboxSlice";
 
 const StyledTopNav = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background-color: white;
   border-bottom: 2px solid gray;
@@ -16,7 +23,6 @@ const StyledTopNav = styled.div`
 
   p {
     margin: 0 0.5rem;
-    margin-right: 1rem;
     font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
       "Segoe UI Symbol";
@@ -35,18 +41,46 @@ const StyledTopNav = styled.div`
   }
 `;
 
+const Box = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export function TopNav() {
   const dispatch = useDispatch();
   const sidebar = useSelector(selectSidebar);
+  const currentSet = useSelector(selectCurrentSet);
+  const checked = useSelector(selectChecked);
+  const cardsLoading = useSelector(selectCardsLoading);
+
+  const currentSetChecked = currentSet && checked[currentSet.code];
+
   return (
     <StyledTopNav>
-      <div
-        className="menu-button"
-        onClick={() => dispatch(setSidebar(!sidebar))}
-      >
-        <FaBars />
-      </div>
-      <p>PokéTrack</p>
+      <Box>
+        <div
+          className="menu-button"
+          onClick={() => dispatch(setSidebar(!sidebar))}
+        >
+          <FaBars />
+        </div>
+        <p>PokéTrack</p>
+      </Box>
+
+      {!cardsLoading && (
+        <Box>
+          <p>{currentSet?.name}</p>
+          <p>
+            {currentSetChecked
+              ? currentSet &&
+                Math.round(
+                  (currentSetChecked.length / currentSet.totalCards) * 100
+                )
+              : 0}
+            %
+          </p>
+        </Box>
+      )}
     </StyledTopNav>
   );
 }

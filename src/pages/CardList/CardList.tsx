@@ -28,9 +28,15 @@ const CardContainer = styled.div`
 
 const SetInfo = styled.div`
   text-align: left;
+  align-items: baseline;
   max-width: 1000px;
   margin: 1rem auto;
   padding: 0 1rem;
+
+  p {
+    margin-left: 0.8rem;
+    margin-bottom: 0;
+  }
 
   input,
   .progress {
@@ -98,6 +104,15 @@ export default () => {
                 alt={`${currentSet?.name} logo`}
               />{" "}
               <h1>{currentSet?.name}</h1>
+              <p>
+                {currentSetChecked
+                  ? currentSet &&
+                    Math.round(
+                      (currentSetChecked.length / currentSet.totalCards) * 100
+                    )
+                  : 0}
+                %
+              </p>
             </div>
             <small>
               Released{" "}
