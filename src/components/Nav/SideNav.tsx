@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchSets,
-  fetchCardsBySet,
-} from "../../pages/CardList/cardListThunks";
+import { fetchSets } from "../../pages/CardList/cardListThunks";
 import {
   selectSets,
   selectSetsLoading,
@@ -111,12 +108,6 @@ export function SideNav() {
                 <div
                   className="set"
                   onClick={() => {
-                    dispatch(
-                      fetchCardsBySet({
-                        set: set.name,
-                        pageSize: set.totalCards,
-                      })
-                    );
                     dispatch(setSelectedSet(set.name));
                     dispatch(setSidebar(false));
                     dispatch(setSidebarSearchterm(""));

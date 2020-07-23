@@ -81,10 +81,7 @@ export const selectSidebarSearchterm = (state: RootState) =>
 
 export const selectCurrentSet = (state: RootState) =>
   state.cardList.sets?.find(
-    (set) =>
-      set.name ===
-      (state.cardList.cardsForCurrentSet &&
-        state.cardList.cardsForCurrentSet[0]?.set)
+    (set) => set.name === state.checkedCards.selectedSet
   );
 
 export default cardListSlice.reducer;

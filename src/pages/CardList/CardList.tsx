@@ -78,13 +78,17 @@ export default () => {
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
-    dispatch(
-      fetchCardsBySet({
-        set: selectedSet,
-        pageSize: 220,
-      })
-    );
-  }, [dispatch, selectedSet]);
+    if (currentSet) {
+      dispatch(
+        fetchCardsBySet({
+          set: selectedSet,
+          pageSize: 220,
+          series: currentSet?.series,
+          setCode: currentSet?.code,
+        })
+      );
+    }
+  }, [dispatch, selectedSet, currentSet]);
 
   const filteredCards = cards
     ?.slice()
