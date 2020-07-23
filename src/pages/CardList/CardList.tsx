@@ -18,7 +18,7 @@ import { device } from "../../util/device";
 import { selectChecked, selectSelectedSet } from "../../app/checkboxSlice";
 import ZoomedCard from "../../components/ZoomedCardView/ZoomedCard";
 
-const CardContainer = styled.div`
+export const PageContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -106,9 +106,9 @@ export default () => {
       <TopNav />
       <SideNav />
       {cardsLoading ? (
-        <CardContainer>
+        <PageContainer>
           <Spinner type="grow" color="primary" />
-        </CardContainer>
+        </PageContainer>
       ) : (
         <>
           <SetInfo>
@@ -166,7 +166,7 @@ export default () => {
             </StyledCheckbox>
           </SetInfo>
 
-          <CardContainer>
+          <PageContainer>
             {filteredCards?.map((card) => (
               <Card
                 key={card.id}
@@ -177,7 +177,7 @@ export default () => {
                 }}
               />
             ))}
-          </CardContainer>
+          </PageContainer>
           <ZoomedCard
             toggle={toggle}
             isOpen={modal}

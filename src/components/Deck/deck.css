@@ -1,0 +1,25 @@
+.deck {
+  position: relative;
+  width: 500px;
+  height: 500px;
+}
+
+.deck-stack {
+  position: absolute;
+  height: 500px;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deck-stack-card {
+  background-color: white;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 240px;
+  height: 330px;
+  will-change: transform;
+  border-radius: 10px;
+}

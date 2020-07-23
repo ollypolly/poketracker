@@ -76,6 +76,12 @@ export function TopNav() {
           {darkMode ? <FaSun /> : <FaMoon />}
         </div>
         <p>PokéTrack</p>
+        {/* <Link to="/deckbuilder">
+          <p className="font-weight-light">
+            DeckBuilder
+            <sup className="font-weight-light">Test</sup>
+          </p>
+        </Link> */}
       </Box>
 
       {!cardsLoading && (
