@@ -5,14 +5,16 @@ import {
   selectSets,
   selectSetsLoading,
   selectSidebar,
-  setSidebar,
   selectSidebarSearchterm,
   setSidebarSearchterm,
-  setSearchterm,
 } from "../../pages/CardList/cardListSlice";
-import { Spinner, Input, Progress } from "reactstrap";
+import { Spinner, Input } from "reactstrap";
 import styled from "styled-components";
-import { selectChecked, setSelectedSet } from "../../app/checkboxSlice";
+import { selectFavourites } from "../../app/checkboxSlice";
+import { FaStar } from "react-icons/fa";
+import { SetData } from "../../model/card.model";
+import Series from "./Series";
+import Set from "./Set";
 
 export interface Props {
   navOpen: boolean;
@@ -32,14 +34,39 @@ const StyledNavContainer = styled.div<Props>`
   display: inline-block;
   border-right: 2px solid #37a9f8;
 
+  hr {
+    background-color: ${({ theme }) => theme.text};
+  }
+
   .set {
     cursor: pointer;
     padding: 1rem;
-    height: 100px;
-    background-size: 180px;
+    height: 60px;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    transition: all 0.4s ease 0s;
+    color: white;
+
+    h3 {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+
+  .series {
+    cursor: pointer;
+    padding: 1rem;
+    height: 60px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    h3 {
+      margin-bottom: 0;
+    }
 
     &:hover {
       background-color: ${({ theme }) => theme.hover};
@@ -50,9 +77,6 @@ const StyledNavContainer = styled.div<Props>`
     position: sticky;
     top: 0;
     padding: 0.5rem;
-
-    input {
-    }
   }
 `;
 
@@ -62,7 +86,7 @@ export function SideNav() {
   const setsLoading = useSelector(selectSetsLoading);
   const sidebar = useSelector(selectSidebar);
   const sidebarSearchterm = useSelector(selectSidebarSearchterm);
-  const checked = useSelector(selectChecked);
+  const favourites = useSelector(selectFavourites);
 
   const filteredSets = sets
     ?.slice()
@@ -74,6 +98,15 @@ export function SideNav() {
         Math.abs(new Date(b.releaseDate).getTime()) -
         Math.abs(new Date(a.releaseDate).getTime())
     );
+
+  const series: { [id: string]: SetData[] } = {};
+
+  // Group sets by series
+  filteredSets?.forEach((set) =>
+    series[set.series]
+      ? series[set.series].push(set)
+      : (series[set.series] = [set])
+  );
 
   useEffect(() => {
     dispatch(fetchSets());
@@ -94,38 +127,38 @@ export function SideNav() {
               }
             />
           </div>
-          {/* <Button size="sm" className="my-2">
-            <FaDownload /> Download collection
-          </Button>
-          <Button size="sm" className="mb-3">
-            <FaUpload /> Restore collection
-          </Button> */}
-
-          {filteredSets?.map((set) => {
-            const currentSetChecked = set && checked[set.code];
-            return (
-              <React.Fragment key={set.code}>
-                <div
-                  className="set"
-                  onClick={() => {
-                    dispatch(setSelectedSet(set.name));
-                    dispatch(setSidebar(false));
-                    dispatch(setSidebarSearchterm(""));
-                    dispatch(setSearchterm(""));
-                  }}
-                  style={{ backgroundImage: `url(${set.logoUrl})` }}
-                ></div>
-                <Progress
-                  value={
-                    currentSetChecked &&
-                    set &&
-                    (currentSetChecked.length / set.totalCards) * 100
-                  }
-                >
-                  {currentSetChecked?.length}/{set?.totalCards}
-                </Progress>
-              </React.Fragment>
-            );
+          {/* <div className="px-3">
+            <Button size="sm" className="my-2">
+              <FaDownload /> Backup my collection
+            </Button>
+            <Button size="sm" className="mb-3">
+              <FaUpload /> Restore collection
+            </Button>
+          </div> */}
+          <div className="pt-0 pb-3">
+            <h4 className="px-3 d-flex align-items-center">
+              <FaStar className="mr-2" /> Favourites
+            </h4>
+            {favourites.length === 0 ? (
+              <div className="px-3">
+                <small>
+                  Add a set to your favourites by clicking the <FaStar /> Icon
+                  next to the set name
+                </small>
+              </div>
+            ) : (
+              filteredSets
+                ?.filter((set) => favourites.includes(set.code))
+                .map((set) => {
+                  return <Set key={set.code} set={set} />;
+                })
+            )}
+          </div>
+          <div className="px-3">
+            <h4>All Sets</h4>
+          </div>
+          {Object.keys(series).map((key) => {
+            return <Series key={key} series={key} sets={series[key]} />;
           })}
         </>
       )}

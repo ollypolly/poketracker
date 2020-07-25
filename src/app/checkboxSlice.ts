@@ -5,11 +5,13 @@ interface CheckedCardsState {
   checked: { [id: string]: string[] };
   selectedSet: string;
   darkMode?: boolean;
+  favourites: string[];
 }
 
 const initialState: CheckedCardsState = {
   checked: {},
   selectedSet: "Rebel Clash",
+  favourites: [],
 };
 
 export const checkedCardsSlice = createSlice({
@@ -34,6 +36,13 @@ export const checkedCardsSlice = createSlice({
     setDarkMode: (state, action) => {
       state.darkMode = action.payload;
     },
+    addFavourite: (state, action) => {
+      state.favourites?.push(action.payload);
+    },
+    removeFavourite: (state, action) => {
+      const index = state.favourites.indexOf(action.payload);
+      state.favourites.splice(index, 1);
+    },
   },
 });
 
@@ -41,6 +50,8 @@ export const {
   checkCard,
   setSelectedSet,
   setDarkMode,
+  addFavourite,
+  removeFavourite,
 } = checkedCardsSlice.actions;
 
 export const selectChecked = (state: RootState) => state.checkedCards.checked;
@@ -49,5 +60,8 @@ export const selectSelectedSet = (state: RootState) =>
   state.checkedCards.selectedSet;
 
 export const selectDarkMode = (state: RootState) => state.checkedCards.darkMode;
+
+export const selectFavourites = (state: RootState) =>
+  state.checkedCards.favourites;
 
 export default checkedCardsSlice.reducer;

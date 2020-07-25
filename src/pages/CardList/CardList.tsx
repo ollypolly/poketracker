@@ -10,13 +10,20 @@ import {
   selectCurrentSet,
 } from "./cardListSlice";
 import { fetchCardsBySet } from "./cardListThunks";
-import { Spinner, Input, Progress } from "reactstrap";
+import { Spinner, Input, Progress, UncontrolledTooltip } from "reactstrap";
 import { SideNav } from "../../components/Nav/SideNav";
 import { TopNav } from "../../components/Nav/TopNav";
 import moment from "moment";
 import { device } from "../../util/device";
-import { selectChecked, selectSelectedSet } from "../../app/checkboxSlice";
+import {
+  selectChecked,
+  selectSelectedSet,
+  selectFavourites,
+  addFavourite,
+  removeFavourite,
+} from "../../app/checkboxSlice";
 import ZoomedCard from "../../components/ZoomedCardView/ZoomedCard";
+import { FaStar } from "react-icons/fa";
 
 export const PageContainer = styled.div`
   display: flex;
@@ -58,6 +65,20 @@ const SetInfo = styled.div`
   }
 `;
 
+interface ButtonProps {
+  isFavourite: boolean;
+}
+
+const StyledFavouritesButton = styled.div<ButtonProps>`
+  cursor: pointer;
+  margin-left: 1rem;
+  color: ${(props) => props.isFavourite && "#37a9f8"};
+
+  &:hover {
+    color: #37a9f8;
+  }
+`;
+
 export default () => {
   const dispatch = useDispatch();
   const cards = useSelector(selectCards);
@@ -65,10 +86,13 @@ export default () => {
   const searchterm = useSelector(selectSearchterm);
   const checked = useSelector(selectChecked);
   const currentSet = useSelector(selectCurrentSet);
+  const favourites = useSelector(selectFavourites);
 
   const selectedSet = useSelector(selectSelectedSet);
 
   const currentSetChecked = currentSet && checked[currentSet.code];
+
+  const isFavourite = favourites.includes(currentSet?.code ?? "");
 
   const [filterCollected, setFilterCollected] = useState(false);
 
@@ -119,7 +143,23 @@ export default () => {
                 src={currentSet?.symbolUrl}
                 alt={`${currentSet?.name} logo`}
               />{" "}
-              <h1>{currentSet?.name}</h1>
+              <div className="d-flex align-items-center">
+                <h1>{currentSet?.name}</h1>{" "}
+                <StyledFavouritesButton
+                  isFavourite={isFavourite}
+                  id="favourites-button"
+                  onClick={() =>
+                    isFavourite
+                      ? dispatch(removeFavourite(currentSet?.code))
+                      : dispatch(addFavourite(currentSet?.code))
+                  }
+                >
+                  <FaStar />
+                </StyledFavouritesButton>
+                <UncontrolledTooltip target="favourites-button">
+                  {isFavourite ? "Remove from Favourites" : "Add to Favourites"}
+                </UncontrolledTooltip>
+              </div>
               <p>
                 {currentSetChecked
                   ? currentSet &&
@@ -155,15 +195,36 @@ export default () => {
               value={searchterm ?? ""}
               onChange={(event) => dispatch(setSearchterm(event.target.value))}
             />
-            <StyledCheckbox check>
-              <Input
-                type="checkbox"
-                checked={filterCollected}
-                onChange={() => setFilterCollected(!filterCollected)}
-              />
-              <span className="checkmark"></span>
-              Not collected
-            </StyledCheckbox>
+            <div className="d-flex justify-content-between align-items-center my-3">
+              <StyledCheckbox check>
+                <Input
+                  type="checkbox"
+                  checked={filterCollected}
+                  onChange={() => setFilterCollected(!filterCollected)}
+                />
+                <span className="checkmark"></span>
+                Not collected
+              </StyledCheckbox>
+              {/* <div>
+                <UncontrolledButtonDropdown>
+                  <DropdownToggle size="sm" caret>
+                    Sort
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>Set Order</DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledButtonDropdown>
+                <UncontrolledButtonDropdown className="ml-2">
+                  <DropdownToggle size="sm" caret>
+                    More Actions
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>Check all</DropdownItem>
+                    <DropdownItem>Uncheck all</DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledButtonDropdown>
+              </div> */}
+            </div>
           </SetInfo>
 
           <PageContainer>
