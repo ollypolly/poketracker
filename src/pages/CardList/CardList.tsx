@@ -10,7 +10,16 @@ import {
   selectCurrentSet,
 } from "./cardListSlice";
 import { fetchCardsBySet } from "./cardListThunks";
-import { Spinner, Input, Progress, UncontrolledTooltip } from "reactstrap";
+import {
+  Spinner,
+  Input,
+  Progress,
+  UncontrolledTooltip,
+  UncontrolledButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 import { SideNav } from "../../components/Nav/SideNav";
 import { TopNav } from "../../components/Nav/TopNav";
 import moment from "moment";
@@ -21,6 +30,8 @@ import {
   selectFavourites,
   addFavourite,
   removeFavourite,
+  checkAll,
+  uncheckAll,
 } from "../../app/checkboxSlice";
 import ZoomedCard from "../../components/ZoomedCardView/ZoomedCard";
 import { FaStar } from "react-icons/fa";
@@ -66,10 +77,10 @@ const SetInfo = styled.div`
 `;
 
 interface ButtonProps {
-  isFavourite: boolean;
+  isFavourite?: boolean;
 }
 
-const StyledFavouritesButton = styled.div<ButtonProps>`
+export const StyledFavouritesButton = styled.div<ButtonProps>`
   cursor: pointer;
   margin-left: 1rem;
   color: ${(props) => props.isFavourite && "#37a9f8"};
@@ -205,29 +216,64 @@ export default () => {
                 <span className="checkmark"></span>
                 Not collected
               </StyledCheckbox>
-              {/* <div>
-                <UncontrolledButtonDropdown>
-                  <DropdownToggle size="sm" caret>
+              <div>
+                {/* <UncontrolledButtonDropdown>
+                  <DropdownToggle outline color="primary" size="sm" caret>
                     Sort
                   </DropdownToggle>
                   <DropdownMenu>
-                    <DropdownItem>Set Order</DropdownItem>
+                    <DropdownItem onClick={() => {}}>Set Order</DropdownItem>
                   </DropdownMenu>
-                </UncontrolledButtonDropdown>
+                </UncontrolledButtonDropdown> */}
                 <UncontrolledButtonDropdown className="ml-2">
-                  <DropdownToggle size="sm" caret>
+                  <DropdownToggle outline color="primary" size="sm" caret>
                     More Actions
                   </DropdownToggle>
                   <DropdownMenu>
-                    <DropdownItem>Check all</DropdownItem>
-                    <DropdownItem>Uncheck all</DropdownItem>
+                    <DropdownItem
+                      onClick={() =>
+                        dispatch(
+                          checkAll({
+                            id: currentSet?.code,
+                            cardIds: cards?.map((card) => card.id),
+                          })
+                        )
+                      }
+                    >
+                      Check all
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => dispatch(uncheckAll(currentSet?.code))}
+                    >
+                      Uncheck all
+                    </DropdownItem>
                   </DropdownMenu>
                 </UncontrolledButtonDropdown>
-              </div> */}
+              </div>
             </div>
           </SetInfo>
 
           <PageContainer>
+            {filteredCards?.length === 0 && (
+              <div className="text-center">
+                <h4>
+                  <span aria-label="celebration" role="img">
+                    🎉
+                  </span>{" "}
+                  Gratz you did it!{" "}
+                  <span aria-label="celebration" role="img">
+                    🎉
+                  </span>
+                </h4>
+                <p>
+                  {currentSet?.name} set complete! (Shout out to your{" "}
+                  <span aria-label="credit card" role="img">
+                    💳
+                  </span>
+                  )
+                </p>
+              </div>
+            )}
             {filteredCards?.map((card) => (
               <Card
                 key={card.id}

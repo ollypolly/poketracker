@@ -1,6 +1,10 @@
 import React from "react";
 import { SetData } from "../../model/card.model";
-import { setSelectedSet, selectChecked } from "../../app/checkboxSlice";
+import {
+  setSelectedSet,
+  selectChecked,
+  removeFavourite,
+} from "../../app/checkboxSlice";
 import {
   setSidebar,
   setSidebarSearchterm,
@@ -8,12 +12,15 @@ import {
 } from "../../pages/CardList/cardListSlice";
 import { Progress } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { FaTimes } from "react-icons/fa";
+import { StyledFavouritesButton } from "../../pages/CardList/CardList";
 
 export interface Props {
   set: SetData;
+  favourite?: boolean;
 }
 
-export default function Set({ set }: Props) {
+export default function Set({ set, favourite }: Props) {
   const dispatch = useDispatch();
   const checked = useSelector(selectChecked);
   const currentSetChecked = set && checked[set.code];
@@ -21,7 +28,7 @@ export default function Set({ set }: Props) {
   return (
     <React.Fragment key={set.code}>
       <div
-        className="set"
+        className="set d-flex justify-content-between align-items-center"
         onClick={() => {
           dispatch(setSelectedSet(set.name));
           dispatch(setSidebar(false));
@@ -33,6 +40,16 @@ export default function Set({ set }: Props) {
         }}
       >
         <strong>{set.name}</strong>
+        {favourite && (
+          <StyledFavouritesButton
+            onClick={(event) => {
+              event.stopPropagation();
+              dispatch(removeFavourite(set.code));
+            }}
+          >
+            <FaTimes />
+          </StyledFavouritesButton>
+        )}
       </div>
       <Progress
         value={

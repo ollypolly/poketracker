@@ -8,10 +8,10 @@ import {
   selectSidebarSearchterm,
   setSidebarSearchterm,
 } from "../../pages/CardList/cardListSlice";
-import { Spinner, Input } from "reactstrap";
+import { Spinner, Input, Button } from "reactstrap";
 import styled from "styled-components";
 import { selectFavourites } from "../../app/checkboxSlice";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaDownload, FaUpload } from "react-icons/fa";
 import { SetData } from "../../model/card.model";
 import Series from "./Series";
 import Set from "./Set";
@@ -24,7 +24,7 @@ const StyledNavContainer = styled.div<Props>`
   position: fixed;
   left: ${(props) => (props.navOpen ? 0 : "-300px")};
   width: 300px;
-  height: 100vh;
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
   z-index: 1;
@@ -127,14 +127,6 @@ export function SideNav() {
               }
             />
           </div>
-          {/* <div className="px-3">
-            <Button size="sm" className="my-2">
-              <FaDownload /> Backup my collection
-            </Button>
-            <Button size="sm" className="mb-3">
-              <FaUpload /> Restore collection
-            </Button>
-          </div> */}
           <div className="pt-0 pb-3">
             <h4 className="px-3 d-flex align-items-center">
               <FaStar className="mr-2" /> Favourites
@@ -150,7 +142,7 @@ export function SideNav() {
               filteredSets
                 ?.filter((set) => favourites.includes(set.code))
                 .map((set) => {
-                  return <Set key={set.code} set={set} />;
+                  return <Set favourite={true} key={set.code} set={set} />;
                 })
             )}
           </div>
@@ -160,6 +152,26 @@ export function SideNav() {
           {Object.keys(series).map((key) => {
             return <Series key={key} series={key} sets={series[key]} />;
           })}
+          <div className="px-3">
+            <Button
+              disabled
+              color="primary"
+              outline
+              size="sm"
+              className="my-2 w-100"
+            >
+              <FaDownload /> Backup my collection
+            </Button>
+            <Button
+              disabled
+              color="primary"
+              outline
+              size="sm"
+              className="mb-3 w-100"
+            >
+              <FaUpload /> Restore collection
+            </Button>
+          </div>
         </>
       )}
     </StyledNavContainer>

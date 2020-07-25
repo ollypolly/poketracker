@@ -30,6 +30,12 @@ export const checkedCardsSlice = createSlice({
         state.checked[action.payload.set] = [action.payload.id];
       }
     },
+    checkAll: (state, action) => {
+      state.checked[action.payload.id] = action.payload.cardIds;
+    },
+    uncheckAll: (state, action) => {
+      state.checked[action.payload] = [];
+    },
     setSelectedSet: (state, action) => {
       state.selectedSet = action.payload;
     },
@@ -52,6 +58,8 @@ export const {
   setDarkMode,
   addFavourite,
   removeFavourite,
+  checkAll,
+  uncheckAll,
 } = checkedCardsSlice.actions;
 
 export const selectChecked = (state: RootState) => state.checkedCards.checked;
