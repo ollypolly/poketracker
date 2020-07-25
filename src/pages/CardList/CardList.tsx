@@ -37,9 +37,11 @@ import ZoomedCard from "../../components/ZoomedCardView/ZoomedCard";
 import { FaStar } from "react-icons/fa";
 
 export const PageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  .cards-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 
   max-width: 1100px;
   margin: 1rem auto;
@@ -254,13 +256,13 @@ export default () => {
           </SetInfo>
 
           <PageContainer>
-            {filteredCards?.length === 0 && (
+            {cards?.length === currentSetChecked?.length && (
               <div className="text-center">
                 <h4>
                   <span aria-label="celebration" role="img">
                     🎉
                   </span>{" "}
-                  Gratz you did it!{" "}
+                  Congratz you did it!{" "}
                   <span aria-label="celebration" role="img">
                     🎉
                   </span>
@@ -274,16 +276,18 @@ export default () => {
                 </p>
               </div>
             )}
-            {filteredCards?.map((card) => (
-              <Card
-                key={card.id}
-                cardData={card}
-                onClick={() => {
-                  setClickedCardId(card.id);
-                  setModal(true);
-                }}
-              />
-            ))}
+            <div className="cards-container">
+              {filteredCards?.map((card) => (
+                <Card
+                  key={card.id}
+                  cardData={card}
+                  onClick={() => {
+                    setClickedCardId(card.id);
+                    setModal(true);
+                  }}
+                />
+              ))}
+            </div>
           </PageContainer>
           <ZoomedCard
             toggle={toggle}
