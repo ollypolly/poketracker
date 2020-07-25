@@ -114,7 +114,9 @@ export function SideNav() {
   return (
     <StyledNavContainer navOpen={sidebar}>
       {setsLoading ? (
-        <Spinner type="grow" color="primary" />
+        <div className="d-flex justify-content-center p-3">
+          <Spinner type="grow" color="primary" />
+        </div>
       ) : (
         <>
           <div className="search">

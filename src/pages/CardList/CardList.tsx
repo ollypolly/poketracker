@@ -112,6 +112,8 @@ export default () => {
   const [modal, setModal] = useState(false);
   const [clickedCardId, setClickedCardId] = useState<string | undefined>();
 
+  console.log(cards?.map((card) => card.id));
+
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
@@ -144,7 +146,9 @@ export default () => {
       <SideNav />
       {cardsLoading ? (
         <PageContainer>
-          <Spinner type="grow" color="primary" />
+          <div className="cards-container">
+            <Spinner type="grow" color="primary" />
+          </div>
         </PageContainer>
       ) : (
         <>
