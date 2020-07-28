@@ -129,14 +129,26 @@ export function SideNav() {
         var reader = new FileReader();
 
         reader.onload = function (event) {
-          dispatch(uploadCollection(event.target?.result));
+          let invalid = false;
+          //@ts-ignore
+          const data = JSON.parse(event.target?.result);
+          const setIds = sets?.map((set) => set.code);
+          Object.keys(data).forEach((key) => {
+            if (!setIds?.includes(key)) {
+              invalid = true;
+            }
+          });
+
+          if (!invalid) {
+            dispatch(uploadCollection(data));
+          }
         };
 
         reader.readAsText(files[0]);
       }
     };
     uploadFiles();
-  }, [dispatch, files]);
+  }, [dispatch, files, sets]);
 
   return (
     <StyledNavContainer navOpen={sidebar}>

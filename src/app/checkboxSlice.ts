@@ -54,7 +54,7 @@ export const checkedCardsSlice = createSlice({
     },
     uploadCollection: (state, action) => {
       const data = action.payload;
-      state.checked = JSON.parse(data);
+      state.checked = data;
     },
   },
 });
