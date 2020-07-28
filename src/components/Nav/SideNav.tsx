@@ -10,11 +10,12 @@ import {
 } from "../../pages/CardList/cardListSlice";
 import { Spinner, Input, Button } from "reactstrap";
 import styled from "styled-components";
-import { selectFavourites } from "../../app/checkboxSlice";
+import { selectFavourites, selectChecked } from "../../app/checkboxSlice";
 import { FaStar, FaDownload, FaUpload } from "react-icons/fa";
 import { SetData } from "../../model/card.model";
 import Series from "./Series";
 import Set from "./Set";
+import { downloadJSON } from "./navThunks";
 
 export interface Props {
   navOpen: boolean;
@@ -87,6 +88,7 @@ export function SideNav() {
   const sidebar = useSelector(selectSidebar);
   const sidebarSearchterm = useSelector(selectSidebarSearchterm);
   const favourites = useSelector(selectFavourites);
+  const checkedCards = useSelector(selectChecked);
 
   const filteredSets = sets
     ?.slice()
@@ -156,11 +158,11 @@ export function SideNav() {
           })}
           <div className="px-3">
             <Button
-              disabled
               color="primary"
               outline
               size="sm"
               className="my-2 w-100"
+              onClick={() => dispatch(downloadJSON(checkedCards))}
             >
               <FaDownload /> Backup my collection
             </Button>

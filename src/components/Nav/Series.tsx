@@ -16,7 +16,10 @@ export default function Series({ series, sets }: Props) {
 
   return (
     <>
-      <div className="series" onClick={() => setExpanded(!expanded)}>
+      <div
+        className="series"
+        onClick={() => !!!sidebarSearchTerm && setExpanded(!expanded)}
+      >
         <h5>{series}</h5>
       </div>
       <Collapse isOpen={expanded || (!!sidebarSearchTerm ?? false)}>

@@ -112,8 +112,6 @@ export default () => {
   const [modal, setModal] = useState(false);
   const [clickedCardId, setClickedCardId] = useState<string | undefined>();
 
-  console.log(cards?.map((card) => card.id));
-
   const toggle = () => setModal(!modal);
 
   useEffect(() => {
