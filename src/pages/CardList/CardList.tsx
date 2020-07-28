@@ -103,7 +103,7 @@ export default () => {
 
   const selectedSet = useSelector(selectSelectedSet);
 
-  const currentSetChecked = currentSet && checked[currentSet.code];
+  const currentSetChecked = currentSet && checked && checked[currentSet.code];
 
   const isFavourite = favourites.includes(currentSet?.code ?? "");
 

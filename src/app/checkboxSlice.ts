@@ -19,6 +19,9 @@ export const checkedCardsSlice = createSlice({
   initialState,
   reducers: {
     checkCard: (state, action) => {
+      if (!state.checked) {
+        state.checked = {};
+      }
       if (state.checked[action.payload.set] && !action.payload.currentChecked) {
         state.checked[action.payload.set].push(action.payload.id);
       } else if (action.payload.currentChecked) {
@@ -49,6 +52,10 @@ export const checkedCardsSlice = createSlice({
       const index = state.favourites.indexOf(action.payload);
       state.favourites.splice(index, 1);
     },
+    uploadCollection: (state, action) => {
+      const data = action.payload;
+      state.checked = JSON.parse(data);
+    },
   },
 });
 
@@ -60,6 +67,7 @@ export const {
   removeFavourite,
   checkAll,
   uncheckAll,
+  uploadCollection,
 } = checkedCardsSlice.actions;
 
 export const selectChecked = (state: RootState) => state.checkedCards.checked;

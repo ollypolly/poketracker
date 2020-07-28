@@ -10,12 +10,17 @@ import {
 } from "../../pages/CardList/cardListSlice";
 import { Spinner, Input, Button } from "reactstrap";
 import styled from "styled-components";
-import { selectFavourites, selectChecked } from "../../app/checkboxSlice";
+import {
+  selectFavourites,
+  selectChecked,
+  uploadCollection,
+} from "../../app/checkboxSlice";
 import { FaStar, FaDownload, FaUpload } from "react-icons/fa";
 import { SetData } from "../../model/card.model";
 import Series from "./Series";
 import Set from "./Set";
 import { downloadJSON } from "./navThunks";
+import { useFilePicker } from "react-sage";
 
 export interface Props {
   navOpen: boolean;
@@ -110,9 +115,29 @@ export function SideNav() {
       : (series[set.series] = [set])
   );
 
+  const { files, onClick, HiddenFileInput } = useFilePicker({
+    maxFileSize: 10,
+  });
+
   useEffect(() => {
     dispatch(fetchSets());
   }, [dispatch]);
+
+  useEffect(() => {
+    const uploadFiles = async (): Promise<void> => {
+      if (files && files.length !== 0) {
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          dispatch(uploadCollection(event.target?.result));
+        };
+
+        reader.readAsText(files[0]);
+      }
+    };
+    uploadFiles();
+  }, [dispatch, files]);
+
   return (
     <StyledNavContainer navOpen={sidebar}>
       {setsLoading ? (
@@ -167,13 +192,14 @@ export function SideNav() {
               <FaDownload /> Backup my collection
             </Button>
             <Button
-              disabled
               color="primary"
               outline
               size="sm"
               className="mb-3 w-100"
+              onClick={onClick}
             >
               <FaUpload /> Restore collection
+              <HiddenFileInput accept=".json" multiple={false} />
             </Button>
           </div>
         </>

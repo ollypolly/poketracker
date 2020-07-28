@@ -169,7 +169,7 @@ export default function Card({ cardData, hiRes, onClick }: Props) {
   const checked = useSelector(selectChecked);
 
   const isCardChecked =
-    currentSet && checked[currentSet?.code]?.includes(cardData.id);
+    currentSet && checked && checked[currentSet?.code]?.includes(cardData.id);
 
   const [props, set] = useSpring(() => ({
     xys: [0, 0, 1],

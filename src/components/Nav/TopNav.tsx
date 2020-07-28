@@ -58,7 +58,7 @@ export function TopNav() {
   const cardsLoading = useSelector(selectCardsLoading);
   const darkMode = useSelector(selectDarkMode);
 
-  const currentSetChecked = currentSet && checked[currentSet.code];
+  const currentSetChecked = currentSet && checked && checked[currentSet.code];
 
   return (
     <StyledTopNav>

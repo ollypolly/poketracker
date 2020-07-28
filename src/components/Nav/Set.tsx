@@ -23,7 +23,7 @@ export interface Props {
 export default function Set({ set, favourite }: Props) {
   const dispatch = useDispatch();
   const checked = useSelector(selectChecked);
-  const currentSetChecked = set && checked[set.code];
+  const currentSetChecked = set && checked && checked[set.code];
 
   return (
     <React.Fragment key={set.code}>
