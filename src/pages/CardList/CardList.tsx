@@ -135,8 +135,6 @@ export default () => {
     | undefined
     | null;
 
-  console.log(currentSet);
-
   if (querySet) {
     currentSet = sets?.find((setFromSets) => setFromSets.name === params.set);
   }
@@ -149,8 +147,18 @@ export default () => {
 
   const [modal, setModal] = useState(false);
   const [clickedCardId, setClickedCardId] = useState<string | undefined>();
+  const [shareTooltipText, setShareTooltipText] = useState<string>(
+    "Copy URL to clipboard"
+  );
 
   const toggle = () => setModal(!modal);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setShareTooltipText("Copied!");
+      setTimeout(() => setShareTooltipText("Copy URL to clipboard"), 1000);
+    });
+  };
 
   useEffect(() => {
     if (querySet) {
@@ -172,6 +180,7 @@ export default () => {
       );
       setSet(querySet ? querySet : selectedSet);
     }
+    // eslint-disable-next-line
   }, [dispatch, selectedSet, currentSet]);
 
   const filteredCards = cards
@@ -226,11 +235,14 @@ export default () => {
                         ? "Remove from Favourites"
                         : "Add to Favourites"}
                     </UncontrolledTooltip>
-                    <StyledFavouritesButton id="share-button">
+                    <StyledFavouritesButton
+                      id="share-button"
+                      onClick={() => copyToClipboard(window.location.href)}
+                    >
                       <FaShareSquare className="share-button" />
                     </StyledFavouritesButton>
                     <UncontrolledTooltip target="share-button">
-                      Copy link to clipboard
+                      {shareTooltipText}
                     </UncontrolledTooltip>
                   </div>
                 </div>

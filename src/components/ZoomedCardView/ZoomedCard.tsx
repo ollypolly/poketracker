@@ -1,18 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, UncontrolledTooltip } from "reactstrap";
 import Card from "../Card/Card";
 import styled from "styled-components";
 import { CardData } from "../../model/card.model";
-import {
-  FaExternalLinkAlt,
-  FaChevronCircleRight,
-  FaChevronCircleLeft,
-  FaShareSquare,
-} from "react-icons/fa";
+import { FaShareSquare } from "react-icons/fa";
 import { StyledFavouritesButton } from "../../pages/CardList/CardList";
 import { device } from "../../util/device";
 import { useQueryParam, StringParam } from "use-query-params";
-import qs from "query-string";
 
 const StyledModal = styled(Modal)`
   position: relative;
@@ -79,6 +73,20 @@ export interface Props {
 const ZoomedCard = (props: Props) => {
   const { cardData } = props;
   const [, setCard] = useQueryParam("card", StringParam);
+  // Get current set
+  // Get position of selected card in array
+  // Make function to return id of next/previous
+
+  const [shareTooltipText, setShareTooltipText] = useState<string>(
+    "Copy URL to clipboard"
+  );
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setShareTooltipText("Copied!");
+      setTimeout(() => setShareTooltipText("Copy URL to clipboard"), 1000);
+    });
+  };
 
   useEffect(() => {
     setCard(cardData?.id);
@@ -100,7 +108,7 @@ const ZoomedCard = (props: Props) => {
               <div className="d-flex align-items-center justify-content-between">
                 <div className="card-title-area d-flex align-items-baseline">
                   <h1 className="mr-2">{cardData.name} </h1>
-                  <a
+                  {/* <a
                     id="tcgplayerlink"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -111,16 +119,19 @@ const ZoomedCard = (props: Props) => {
                       <p className="font-weight-light mb-0"> approx. $4.20</p>
                     </div>
                   </a>
+                  <UncontrolledTooltip target="tcgplayerlink">
+                  View TCG Player Listing
+                </UncontrolledTooltip> */}
                 </div>
 
-                <UncontrolledTooltip target="tcgplayerlink">
-                  View TCG Player Listing
-                </UncontrolledTooltip>
-                <StyledFavouritesButton id="share-button">
+                <StyledFavouritesButton
+                  id="share-button"
+                  onClick={() => copyToClipboard(window.location.href)}
+                >
                   <FaShareSquare className="share-button" />
                 </StyledFavouritesButton>
                 <UncontrolledTooltip target="share-button">
-                  Copy link to clipboard
+                  {shareTooltipText}
                 </UncontrolledTooltip>
               </div>
 
@@ -131,17 +142,17 @@ const ZoomedCard = (props: Props) => {
             <CardContainer>
               <Card hiRes cardData={cardData} />
             </CardContainer>
-            <div className="left-right-button left-button">
+            {/* <div className="left-right-button left-button" onClick={() => {}}>
               <StyledFavouritesButton>
                 <FaChevronCircleLeft />
               </StyledFavouritesButton>
-            </div>
+            </div> */}
 
-            <div className="left-right-button right-button">
+            {/* <div className="left-right-button right-button">
               <StyledFavouritesButton>
                 <FaChevronCircleRight />
               </StyledFavouritesButton>
-            </div>
+            </div> */}
           </div>
         )}
       </StyledModal>
