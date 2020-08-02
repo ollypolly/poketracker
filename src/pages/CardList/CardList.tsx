@@ -373,6 +373,10 @@ export default () => {
             isOpen={modal}
             cardData={filteredCards?.find((card) => clickedCardId === card.id)}
             setClickedCardId={setClickedCardId}
+            cardIdsInSet={cards
+              ?.slice()
+              .sort((a, b) => parseInt(a.number) - parseInt(b.number))
+              .map((card) => card.id)}
           />
         </>
       )}
