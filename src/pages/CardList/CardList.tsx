@@ -8,6 +8,7 @@ import {
   selectSearchterm,
   setSearchterm,
   selectCurrentSet,
+  selectSets,
 } from "./cardListSlice";
 import { fetchCardsBySet } from "./cardListThunks";
 import {
@@ -32,10 +33,12 @@ import {
   removeFavourite,
   checkAll,
   uncheckAll,
+  setSelectedSet,
 } from "../../app/checkboxSlice";
 import ZoomedCard from "../../components/ZoomedCardView/ZoomedCard";
 import { FaStar, FaShareSquare } from "react-icons/fa";
 import { useQueryParam, StringParam } from "use-query-params";
+import qs from "query-string";
 
 export const PageContainer = styled.div`
   .cards-container {
@@ -118,10 +121,25 @@ export default () => {
   const cardsLoading = useSelector(selectCardsLoading);
   const searchterm = useSelector(selectSearchterm);
   const checked = useSelector(selectChecked);
-  const currentSet = useSelector(selectCurrentSet);
+  const sets = useSelector(selectSets);
+  const selectedSet = useSelector(selectSelectedSet);
+
   const favourites = useSelector(selectFavourites);
 
-  const selectedSet = useSelector(selectSelectedSet);
+  const [, setSet] = useQueryParam("set", StringParam);
+
+  let currentSet = useSelector(selectCurrentSet);
+  const params = qs.parse(window.location.search);
+  const querySet: string | undefined | null = params.set as
+    | string
+    | undefined
+    | null;
+
+  console.log(currentSet);
+
+  if (querySet) {
+    currentSet = sets?.find((setFromSets) => setFromSets.name === params.set);
+  }
 
   const currentSetChecked = currentSet && checked && checked[currentSet.code];
 
@@ -134,33 +152,27 @@ export default () => {
 
   const toggle = () => setModal(!modal);
 
-  const [set, setSet] = useQueryParam("set", StringParam);
-
   useEffect(() => {
-    if (set) {
+    if (querySet) {
+      // Set current set
+      dispatch(setSelectedSet(querySet));
+    }
+    if (params.card) {
+      setClickedCardId(params.card as string);
+      setModal(true);
+    }
+    if (currentSet) {
       dispatch(
         fetchCardsBySet({
-          set: set,
+          set: querySet ? querySet : selectedSet,
           pageSize: 220,
           series: currentSet?.series,
           setCode: currentSet?.code,
         })
       );
-      setSet(selectedSet);
-    } else {
-      if (currentSet) {
-        dispatch(
-          fetchCardsBySet({
-            set: selectedSet,
-            pageSize: 220,
-            series: currentSet?.series,
-            setCode: currentSet?.code,
-          })
-        );
-        setSet(selectedSet);
-      }
+      setSet(querySet ? querySet : selectedSet);
     }
-  }, [dispatch, selectedSet, currentSet, setSet, set]);
+  }, [dispatch, selectedSet, currentSet]);
 
   const filteredCards = cards
     ?.slice()
@@ -348,6 +360,7 @@ export default () => {
             toggle={toggle}
             isOpen={modal}
             cardData={filteredCards?.find((card) => clickedCardId === card.id)}
+            setClickedCardId={setClickedCardId}
           />
         </>
       )}

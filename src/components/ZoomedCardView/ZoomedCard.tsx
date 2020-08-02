@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, UncontrolledTooltip } from "reactstrap";
 import Card from "../Card/Card";
 import styled from "styled-components";
@@ -11,6 +11,8 @@ import {
 } from "react-icons/fa";
 import { StyledFavouritesButton } from "../../pages/CardList/CardList";
 import { device } from "../../util/device";
+import { useQueryParam, StringParam } from "use-query-params";
+import qs from "query-string";
 
 const StyledModal = styled(Modal)`
   position: relative;
@@ -71,13 +73,26 @@ export interface Props {
   cardData?: CardData;
   isOpen: boolean;
   toggle: () => void;
+  setClickedCardId: (cardId: string) => void;
 }
 
 const ZoomedCard = (props: Props) => {
   const { cardData } = props;
+  const [, setCard] = useQueryParam("card", StringParam);
+
+  useEffect(() => {
+    setCard(cardData?.id);
+  }, [cardData, setCard]);
+
   return (
     <div>
-      <StyledModal isOpen={props.isOpen} toggle={props.toggle}>
+      <StyledModal
+        isOpen={props.isOpen}
+        toggle={() => {
+          setCard(undefined);
+          props.toggle();
+        }}
+      >
         {cardData && (
           <div>
             <CardInfo>

@@ -24,7 +24,7 @@ export default function Series({ series, sets }: Props) {
       </div>
       <Collapse isOpen={expanded || (!!sidebarSearchTerm ?? false)}>
         {sets?.map((set) => {
-          return <Set key={set.code} set={set} />;
+          return <Set key={set.code} setProp={set} />;
         })}
       </Collapse>
     </>

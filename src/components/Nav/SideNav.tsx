@@ -183,7 +183,7 @@ export function SideNav() {
               filteredSets
                 ?.filter((set) => favourites.includes(set.code))
                 .map((set) => {
-                  return <Set favourite={true} key={set.code} set={set} />;
+                  return <Set favourite={true} key={set.code} setProp={set} />;
                 })
             )}
           </div>

@@ -15,49 +15,52 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaTimes } from "react-icons/fa";
 import { StyledFavouritesButton } from "../../pages/CardList/CardList";
 import moment from "moment";
+import { useQueryParam, StringParam } from "use-query-params";
 
 export interface Props {
-  set: SetData;
+  setProp: SetData;
   favourite?: boolean;
 }
 
-export default function Set({ set, favourite }: Props) {
+export default function Set({ setProp, favourite }: Props) {
   const dispatch = useDispatch();
   const checked = useSelector(selectChecked);
-  const currentSetChecked = set && checked && checked[set.code];
+  const currentSetChecked = setProp && checked && checked[setProp.code];
+  const [, setSet] = useQueryParam("set", StringParam);
 
   return (
-    <React.Fragment key={set.code}>
+    <React.Fragment key={setProp.code}>
       <div
         className="set d-flex justify-content-between align-items-center"
         onClick={() => {
-          dispatch(setSelectedSet(set.name));
+          setSet(setProp.name);
+          dispatch(setSelectedSet(setProp.name));
           dispatch(setSidebar(false));
           dispatch(setSidebarSearchterm(""));
           dispatch(setSearchterm(""));
         }}
         style={{
-          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) ), url(${set.logoUrl})`,
+          backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) ), url(${setProp.logoUrl})`,
         }}
       >
         <div className="d-flex flex-column">
           <strong>
-            {set.name}{" "}
-            {currentSetChecked?.length / set?.totalCards >= 1 && (
+            {setProp.name}{" "}
+            {currentSetChecked?.length / setProp?.totalCards >= 1 && (
               <span aria-label="checkmark" role="img">
                 🎉
               </span>
             )}
           </strong>
           <small className="release-date">
-            {moment(set.releaseDate).format("LL")}
+            {moment(setProp.releaseDate).format("LL")}
           </small>
         </div>
         {favourite && (
           <StyledFavouritesButton
             onClick={(event) => {
               event.stopPropagation();
-              dispatch(removeFavourite(set.code));
+              dispatch(removeFavourite(setProp.code));
             }}
           >
             <FaTimes />
@@ -67,11 +70,11 @@ export default function Set({ set, favourite }: Props) {
       <Progress
         value={
           currentSetChecked &&
-          set &&
-          (currentSetChecked.length / set.totalCards) * 100
+          setProp &&
+          (currentSetChecked.length / setProp.totalCards) * 100
         }
       >
-        {currentSetChecked?.length}/{set?.totalCards}
+        {currentSetChecked?.length}/{setProp?.totalCards}
       </Progress>
     </React.Fragment>
   );
