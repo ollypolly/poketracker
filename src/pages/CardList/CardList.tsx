@@ -53,9 +53,20 @@ const SetInfo = styled.div`
   margin: 1rem auto;
   padding: 0 1rem;
 
-  p {
-    margin-left: 0.8rem;
-    margin-right: 0.8rem;
+  .set-header {
+    @media ${device.tablet} {
+      flex-direction: column;
+
+      .percentage-complete {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+  }
+
+  .percentage-complete {
+    margin-left: 1rem;
+    margin-right: 1rem;
     font-weight: 200;
     margin-bottom: 0;
     font-size: 1.5rem;
@@ -151,15 +162,15 @@ export default () => {
       ) : (
         <>
           <SetInfo>
-            <div className="d-flex align-items-baseline">
-              <img
-                height="30"
-                className="mr-2"
-                src={currentSet?.symbolUrl}
-                alt={`${currentSet?.name} logo`}
-              />{" "}
+            <div className="set-header d-flex align-items-baseline">
               <div className="d-flex align-items-center">
-                <h1>{currentSet?.name}</h1>{" "}
+                <img
+                  height="30"
+                  className="mr-2"
+                  src={currentSet?.symbolUrl}
+                  alt={`${currentSet?.name} logo`}
+                />{" "}
+                <h1 className="mb-0">{currentSet?.name}</h1>{" "}
                 <StyledFavouritesButton
                   isFavourite={isFavourite}
                   id="favourites-button"
@@ -175,7 +186,7 @@ export default () => {
                   {isFavourite ? "Remove from Favourites" : "Add to Favourites"}
                 </UncontrolledTooltip>
               </div>
-              <p>
+              <p className="percentage-complete">
                 {currentSetChecked
                   ? currentSet &&
                     Math.round(

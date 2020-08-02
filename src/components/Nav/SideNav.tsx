@@ -27,6 +27,7 @@ export interface Props {
 }
 
 const StyledNavContainer = styled.div<Props>`
+  max-width: 100%;
   position: fixed;
   left: ${(props) => (props.navOpen ? 0 : "-300px")};
   width: 300px;
@@ -47,7 +48,6 @@ const StyledNavContainer = styled.div<Props>`
   .set {
     cursor: pointer;
     padding: 1rem;
-    height: 60px;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

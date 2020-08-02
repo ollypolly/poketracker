@@ -14,6 +14,7 @@ import { Progress } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTimes } from "react-icons/fa";
 import { StyledFavouritesButton } from "../../pages/CardList/CardList";
+import moment from "moment";
 
 export interface Props {
   set: SetData;
@@ -39,7 +40,12 @@ export default function Set({ set, favourite }: Props) {
           backgroundImage: `linear-gradient( rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) ), url(${set.logoUrl})`,
         }}
       >
-        <strong>{set.name}</strong>
+        <div className="d-flex flex-column">
+          <strong>{set.name}</strong>
+          <small className="release-date">
+            {moment(set.releaseDate).format("LL")}
+          </small>
+        </div>
         {favourite && (
           <StyledFavouritesButton
             onClick={(event) => {
