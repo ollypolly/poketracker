@@ -287,13 +287,16 @@ export default () => {
                     🎉
                   </span>
                 </h4>
-                <p>
-                  {currentSet?.name} set complete! (Shout out to your{" "}
-                  <span aria-label="credit card" role="img">
-                    💳
-                  </span>
-                  )
-                </p>
+                <div className="d-flex flex-column mb-3">
+                  <span>{currentSet?.name} set complete! </span>
+                  <small className="font-weight-light">
+                    (Shout out to your{" "}
+                    <span aria-label="credit card" role="img">
+                      💳
+                    </span>
+                    )
+                  </small>
+                </div>
               </div>
             )}
             <div className="cards-container">
