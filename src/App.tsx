@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { selectDarkMode } from "./app/checkboxSlice";
 import DeckBuilder from "./pages/DeckBuilder/DeckBuilder";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import { QueryParamProvider } from "use-query-params";
 
 function App() {
   const darkMode = useSelector(selectDarkMode);
@@ -17,9 +18,11 @@ function App() {
       <>
         <GlobalStyles />
         <BrowserRouter>
-          <Route exact path="/" component={CardList} />
-          <Route exact path="/deckbuilder" component={DeckBuilder} />
-          <Redirect to="/" />
+          <QueryParamProvider ReactRouterRoute={Route}>
+            <Route exact path="/" component={CardList} />
+            <Route exact path="/deckbuilder" component={DeckBuilder} />
+            <Redirect to="/" />
+          </QueryParamProvider>
         </BrowserRouter>
       </>
     </ThemeProvider>

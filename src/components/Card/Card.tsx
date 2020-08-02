@@ -22,7 +22,7 @@ interface ContainerProps {
 const EventCardContainer = styled.div<ContainerProps>`
   width: ${(props) => (props.hiRes ? "400px" : "245px")};
   height: ${(props) => (props.hiRes ? "567px" : "342px")};
-  margin: 0.5rem;
+  margin: ${(props) => (props.hiRes ? "auto" : "0.5rem")};
   padding: 1rem;
   border-radius: 10px;
   box-sizing: border-box;

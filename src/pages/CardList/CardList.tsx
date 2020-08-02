@@ -34,7 +34,8 @@ import {
   uncheckAll,
 } from "../../app/checkboxSlice";
 import ZoomedCard from "../../components/ZoomedCardView/ZoomedCard";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaShareSquare } from "react-icons/fa";
+import { useQueryParam, StringParam } from "use-query-params";
 
 export const PageContainer = styled.div`
   .cards-container {
@@ -64,6 +65,10 @@ const SetInfo = styled.div`
       .percentage-complete {
         margin-left: 0;
         margin-right: 0;
+      }
+
+      .set-completion-stats {
+        flex-direction: column;
       }
     }
   }
@@ -129,18 +134,33 @@ export default () => {
 
   const toggle = () => setModal(!modal);
 
+  const [set, setSet] = useQueryParam("set", StringParam);
+
   useEffect(() => {
-    if (currentSet) {
+    if (set) {
       dispatch(
         fetchCardsBySet({
-          set: selectedSet,
+          set: set,
           pageSize: 220,
           series: currentSet?.series,
           setCode: currentSet?.code,
         })
       );
+      setSet(selectedSet);
+    } else {
+      if (currentSet) {
+        dispatch(
+          fetchCardsBySet({
+            set: selectedSet,
+            pageSize: 220,
+            series: currentSet?.series,
+            setCode: currentSet?.code,
+          })
+        );
+        setSet(selectedSet);
+      }
     }
-  }, [dispatch, selectedSet, currentSet]);
+  }, [dispatch, selectedSet, currentSet, setSet, set]);
 
   const filteredCards = cards
     ?.slice()
@@ -166,7 +186,7 @@ export default () => {
       ) : (
         <>
           <SetInfo>
-            <div className="set-header d-flex align-items-baseline">
+            <div className="set-header d-flex align-items-baseline justify-content-between">
               <div className="d-flex align-items-center">
                 <img
                   height="30"
@@ -176,35 +196,47 @@ export default () => {
                 />{" "}
                 <div className="title-area">
                   <small>{currentSet?.series}</small>
-                  <h1 className="mb-0">{currentSet?.name}</h1>{" "}
+                  <div className="d-flex align-items-center">
+                    <h1 className="mb-0">{currentSet?.name}</h1>{" "}
+                    <StyledFavouritesButton
+                      isFavourite={isFavourite}
+                      id="favourites-button"
+                      onClick={() =>
+                        isFavourite
+                          ? dispatch(removeFavourite(currentSet?.code))
+                          : dispatch(addFavourite(currentSet?.code))
+                      }
+                    >
+                      <FaStar />
+                    </StyledFavouritesButton>
+                    <UncontrolledTooltip target="favourites-button">
+                      {isFavourite
+                        ? "Remove from Favourites"
+                        : "Add to Favourites"}
+                    </UncontrolledTooltip>
+                    <StyledFavouritesButton id="share-button">
+                      <FaShareSquare className="share-button" />
+                    </StyledFavouritesButton>
+                    <UncontrolledTooltip target="share-button">
+                      Copy link to clipboard
+                    </UncontrolledTooltip>
+                  </div>
                 </div>
-                <StyledFavouritesButton
-                  isFavourite={isFavourite}
-                  id="favourites-button"
-                  onClick={() =>
-                    isFavourite
-                      ? dispatch(removeFavourite(currentSet?.code))
-                      : dispatch(addFavourite(currentSet?.code))
-                  }
-                >
-                  <FaStar />
-                </StyledFavouritesButton>
-                <UncontrolledTooltip target="favourites-button">
-                  {isFavourite ? "Remove from Favourites" : "Add to Favourites"}
-                </UncontrolledTooltip>
               </div>
-              <p className="percentage-complete">
-                {currentSetChecked
-                  ? currentSet &&
-                    Math.round(
-                      (currentSetChecked.length / currentSet.totalCards) * 100
-                    )
-                  : 0}
-                %
-              </p>
-              <small>
-                {currentSetChecked?.length ?? 0}/{currentSet?.totalCards}
-              </small>
+              <div className="set-completion-stats d-flex align-items-baseline">
+                <p className="percentage-complete">
+                  {currentSetChecked
+                    ? currentSet &&
+                      Math.round(
+                        (currentSetChecked.length / currentSet.totalCards) * 100
+                      )
+                    : 0}
+                  %
+                </p>
+                <small>
+                  {currentSetChecked?.length ?? 0}/{currentSet?.totalCards}
+                </small>
+              </div>
             </div>
             <small>
               Released{" "}
