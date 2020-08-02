@@ -53,6 +53,10 @@ const SetInfo = styled.div`
   margin: 1rem auto;
   padding: 0 1rem;
 
+  .title-area {
+    line-height: 0;
+  }
+
   .set-header {
     @media ${device.tablet} {
       flex-direction: column;
@@ -170,7 +174,10 @@ export default () => {
                   src={currentSet?.symbolUrl}
                   alt={`${currentSet?.name} logo`}
                 />{" "}
-                <h1 className="mb-0">{currentSet?.name}</h1>{" "}
+                <div className="title-area">
+                  <small>{currentSet?.series}</small>
+                  <h1 className="mb-0">{currentSet?.name}</h1>{" "}
+                </div>
                 <StyledFavouritesButton
                   isFavourite={isFavourite}
                   id="favourites-button"
