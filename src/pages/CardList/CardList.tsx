@@ -54,7 +54,7 @@ const SetInfo = styled.div`
   padding: 0 1rem;
 
   .title-area {
-    line-height: 0;
+    line-height: 0.3;
   }
 
   .set-header {
@@ -71,13 +71,13 @@ const SetInfo = styled.div`
   .percentage-complete {
     margin-left: 1rem;
     margin-right: 1rem;
-    font-weight: 200;
+    font-weight: 300;
     margin-bottom: 0;
     font-size: 1.5rem;
   }
 
   small {
-    font-weight: 200;
+    font-weight: 400;
   }
 
   input,
