@@ -41,7 +41,14 @@ export default function Set({ set, favourite }: Props) {
         }}
       >
         <div className="d-flex flex-column">
-          <strong>{set.name}</strong>
+          <strong>
+            {set.name}{" "}
+            {currentSetChecked?.length / set?.totalCards >= 1 && (
+              <span aria-label="checkmark" role="img">
+                🎉
+              </span>
+            )}
+          </strong>
           <small className="release-date">
             {moment(set.releaseDate).format("LL")}
           </small>
