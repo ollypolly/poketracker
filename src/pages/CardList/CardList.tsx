@@ -57,6 +57,10 @@ const SetInfo = styled.div`
   margin: 1rem auto;
   padding: 0 1rem;
 
+  hr {
+    border-color: ${({ theme }) => theme.textFaded};
+  }
+
   .title-area {
     line-height: 0.3;
   }
@@ -278,12 +282,6 @@ export default () => {
               {currentSetChecked?.length}/{currentSet?.totalCards}
             </Progress>
 
-            <Input
-              type="text"
-              placeholder="Search card list..."
-              value={searchterm ?? ""}
-              onChange={(event) => dispatch(setSearchterm(event.target.value))}
-            />
             <div className="d-flex justify-content-between align-items-center my-3">
               <StyledCheckbox check>
                 <Input
@@ -329,9 +327,6 @@ export default () => {
                 </UncontrolledButtonDropdown>
               </div>
             </div>
-          </SetInfo>
-
-          <PageContainer>
             {cards?.length === currentSetChecked?.length && (
               <div className="text-center">
                 <h4>
@@ -355,6 +350,16 @@ export default () => {
                 </div>
               </div>
             )}
+            <hr />
+            <Input
+              type="text"
+              placeholder="Search card list..."
+              value={searchterm ?? ""}
+              onChange={(event) => dispatch(setSearchterm(event.target.value))}
+            />
+          </SetInfo>
+
+          <PageContainer>
             <div className="cards-container">
               {filteredCards?.map((card) => (
                 <Card
