@@ -98,8 +98,10 @@ const ZoomedCard = (props: Props) => {
   };
 
   useEffect(() => {
-    setCard(cardData?.id);
-  }, [cardData, setCard]);
+    if (props.isOpen) {
+      setCard(cardData?.id);
+    }
+  }, [cardData, setCard, props.isOpen]);
 
   return (
     <div>
