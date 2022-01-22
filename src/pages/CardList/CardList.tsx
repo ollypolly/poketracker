@@ -176,7 +176,6 @@ export default () => {
     if (currentSet) {
       dispatch(
         fetchCardsBySet({
-          set: querySet ? querySet : selectedSet,
           pageSize: 220,
           series: currentSet?.series,
           setCode: currentSet?.code,
